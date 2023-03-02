@@ -31,7 +31,7 @@ if (!isset($_SESSION['username'])) {
             </div>
         </div>
         <div id="fils" class="container d-flex justify-content-center"></div>
-        <div class="row table-responsive d-flex justify-content-center py-2 px-3" id="section__content"></div>
+        <div class="row table-responsive d-flex justify-content-center py-2 px-3" id="main__content"></div>
     </section>
 
     <?php require __DIR__ . '/includes/footer.php' ?>

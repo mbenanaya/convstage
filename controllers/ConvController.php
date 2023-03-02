@@ -117,24 +117,7 @@ class ConvController
         echo json_encode($data);
     }
 
-    public function showConvStats()
-    {
-        $diplomes = [
-            'countLicence' => [],
-            'countMaster' => [],
-            'countIngenieur' => [],
-        ];
-        $countLicence = $this->convention->countLicenceDips();
-        $countMaster = $this->convention->countMasterDips();
-        $countIngenieur = $this->convention->countIngenieurDips();
-        
-        $diplomes['countLicence'] = $countLicence;
-        $diplomes['countMaster'] = $countMaster;
-        $diplomes['countIngenieur'] = $countIngenieur;
-
-        header('Content-Type: application/json');
-        echo json_encode($diplomes, JSON_UNESCAPED_UNICODE);
-    }
+    
 }
 
 $conv = new ConvController;
@@ -151,12 +134,4 @@ if (isset($_POST['action']) && $_POST['action'] == 'showFiltered') {
 
 if (isset($_POST['crCnvButt'])) {
     $conv->createNewConv();
-}
-
-// if (isset($_POST['showSt'])) {
-//     $conv->showConvStats();
-// }
-
-if (isset($_POST['action']) && $_POST['action'] == 'showSts') {
-    $conv->showConvStats();
 }

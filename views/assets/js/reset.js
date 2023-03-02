@@ -78,7 +78,7 @@ $(document).ready(function () {
                                     title: "Mot de passe mise",
                                     text: response.success,
                                 }).then(() => {
-                                        window.location.href = "../logout";
+                                        window.location.href = response.url;
                                 });
                             } else {
                                 console.log(response.error);

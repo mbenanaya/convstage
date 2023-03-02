@@ -143,6 +143,10 @@ h3.auth {
     margin-bottom: 0.5rem !important;
 }
 
+.nav-tabs li p {
+    cursor: pointer;
+}
+
 @media screen and (max-width: 768px) {
     .showAe {
         width: 95px;

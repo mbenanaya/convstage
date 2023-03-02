@@ -82,9 +82,7 @@
     </section>
 
     <?php require_once __DIR__ . '/includes/footer.php' ?>
-
     <?php require_once __DIR__ . '/includes/js_scripts.php' ?>
-
     <script src="views/assets/js/login.js"></script>
 </body>
 

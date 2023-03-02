@@ -19,7 +19,7 @@ class Convention
     public function addNewConv($data)
     {
         try {
-            $stmt = $this->conn->prepare("INSERT INTO convention(idConv, cne, nom, prenom, diplome, intitule, description, nomEntr, adrEntr, telEntr, nomEncd, datedebut, datefin) VALUES (:idConv, :cne, :nom, :prenom, :diplome, :description, :intitule, :nomEntr, :adrEntr, :telEntr, :nomEncd, :datedebut, :datefin)");
+            $stmt = $this->conn->prepare("INSERT INTO convention(idConv, cne, nom, prenom, diplome, intitule, description, nomEntr, adrEntr, telEntr, nomEncd, datedebut, datefin, idEntr) VALUES (:idConv, :cne, :nom, :prenom, :diplome, :description, :intitule, :nomEntr, :adrEntr, :telEntr, :nomEncd, :datedebut, :datefin, (SELECT idEntr FROM entreprise WHERE entreprise.nomEntr = :nomEntr))");
             $stmt->bindParam(':idConv', $data['idConv']);
             $stmt->bindParam(':cne', $data['cne']);
             $stmt->bindParam(':nom', $data['nom']);
@@ -116,6 +116,46 @@ class Convention
     function countIngenieurDips()
     {
         $stmt = $this->conn->prepare("SELECT COUNT(idConv) AS countIngenieur FROM convention WHERE diplome IN ('AMTSDAD', 'ADIISA ', 'ADIIFA ', 'ADIIRSI', 'ADERME ', 'ADIGMP ', 'ADIIGC ', 'ADIIRIS')");
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }
+
+    public function countMasc()
+    {
+        $stmt = $this->conn->prepare("SELECT COUNT(DISTINCT(convention.cne)) AS countMasc FROM convention JOIN etudiant ON convention.cne = etudiant.cne WHERE etudiant.sex = 'M'");
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }
+
+    public function countFem()
+    {
+        $stmt = $this->conn->prepare("SELECT COUNT(DISTINCT(convention.cne)) AS countFem FROM convention JOIN etudiant ON convention.cne = etudiant.cne WHERE etudiant.sex = 'F'");
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }
+
+    public function countLicEntrs()
+    {
+        $stmt = $this->conn->prepare("SELECT COUNT(DISTINCT(convention.idEntr)) AS countLicEntrs FROM convention JOIN entreprise ON convention.idEntr = entreprise.idEntr WHERE convention.diplome IN ('AMTSDAD', 'ADIISA ', 'ADIIFA ', 'ADIIRSI', 'ADERME ', 'ADIGMP ', 'ADIIGC ', 'ADIIRIS')");
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }
+
+    public function countMasEntrs()
+    {
+        $stmt = $this->conn->prepare("SELECT COUNT(DISTINCT(convention.idEntr)) AS countMasEntrs FROM convention JOIN entreprise ON convention.idEntr = entreprise.idEntr WHERE convention.diplome IN ('AMTSDAD', 'ADIISA ', 'ADIIFA ', 'ADIIRSI', 'ADERME ', 'ADIGMP ', 'ADIIGC ', 'ADIIRIS')");
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }
+
+    public function countIngEntrs()
+    {
+        $stmt = $this->conn->prepare("SELECT COUNT(DISTINCT(convention.idEntr)) AS countIngEntrs FROM convention JOIN entreprise ON convention.idEntr = entreprise.idEntr WHERE convention.diplome IN ('AMTSDAD', 'ADIISA ', 'ADIIFA ', 'ADIIRSI', 'ADERME ', 'ADIGMP ', 'ADIIGC ', 'ADIIRIS')");
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $rows;

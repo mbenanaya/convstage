@@ -35,7 +35,7 @@ if (isset($_POST['email'])) {
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
         $mail->CharSet = "UTF-8";
-        $mail->setFrom('bamouhcine91@gmail.com', 'FSTG Admin');
+        $mail->setFrom('bamouhcine91@gmail.com', 'Convention de stage - FSTG');
         $mail->addAddress($email);
         $mail->isHTML(true);
         $mail->Subject = 'Réinitialiser mot de passe';

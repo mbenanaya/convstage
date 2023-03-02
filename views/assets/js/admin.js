@@ -15,7 +15,7 @@ function getAllEntrs() {
             success: function (data) {
                 $("#fils").html("");
                 $("#fils").css("display", "none");
-                $("#section__content").html(data);
+                $("#main__content").html(data);
             },
             error: function (xhr, textStatus, errorThrown) {
                 console.error(textStatus, errorThrown);
@@ -48,7 +48,7 @@ function showDiplomesNames() {
             },
             success: function (data) {
                 if ("error" in data) {
-                    $("#section__content").html("");
+                    $("#main__content").html("");
                     $("#fils").html(
                         '<div class="alert alert-danger px-5 py-3 mx-1 mt-5" role="alert"><h2 class="fw-normal fs-3 col-12 text-center m-0 p-0">' +
                             data.error +
@@ -96,7 +96,7 @@ function showDiplomesNames() {
 
                     Select += "</optgroup>";
                     Select += "</select>";
-                    $("#section__content").html("");
+                    $("#main__content").html("");
                     $("#fils").html(Select);
                 }
             },
@@ -153,7 +153,7 @@ function showAllConvs() {
                         "</td> </tr>";
                 });
                 ConvsTable += "</tbody></table>";
-                $("#section__content").html(ConvsTable);
+                $("#main__content").html(ConvsTable);
             },
             error: function (xhr, status, error) {
                 Swal.fire({
@@ -173,90 +173,27 @@ function showStatics() {
         $(".showAc").removeClass("active_link");
         $(".showAe").removeClass("active_link");
         $.ajax({
-            url: "./controllers/ConvController.php",
-            type: "POST",
+            type: "post",
+            url: "./controllers/Ajax.php",
             data: { action: "showSts" },
-            dataType: "json",
-            beforeSend: function () {
-                showLoadingSpinner();
-            },
-            success: function (data) {
-                var countLicence = data.countLicence[0].countLicence;
-                var countMaster = data.countMaster[0].countMaster;
-                var countIngenieur = data.countIngenieur[0].countIngenieur;
-
+            dataType: "html",
+            success: function (response) {
                 $("#fils").html("");
                 $("#fils").css("display", "none");
-                var chart =
-                    "<canvas id='myChart' style='background-color: #f5f5f5;max-width: 80%;max-heigth: 60%'></canvas>";
-                $("#section__content").html(chart);
-
-                var ctx = document.getElementById("myChart").getContext("2d");
-                var myChart = new Chart(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: ["Licence", "Master", "Ingénieur"],
-                        datasets: [
-                            {
-                                label: "Conventions",
-                                data: [
-                                    countLicence,
-                                    countMaster,
-                                    countIngenieur,
-                                ],
-                                backgroundColor: [
-                                    "rgba(255, 193, 7, 0.2)",
-                                    "rgba(33, 150, 243, 0.2)",
-                                    "rgba(76, 175, 80, 0.2)",
-                                ],
-                                borderColor: [
-                                    "rgba(255, 193, 7, 1)",
-                                    "rgba(33, 150, 243, 1)",
-                                    "rgba(76, 175, 80, 1)",
-                                ],
-                                borderWidth: 1,
-                                options: { responsive: true },
-                            },
-                        ],
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                            },
-                        },
-                    },
-                });
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-                Swal.fire({
-                    icon: "error",
-                    title: "Erreur",
-                    text: "Une erreur est survenue",
-                });
-            },
-            complete: function () {
-                hideLoadingSpinner();
+                $("#main__content").html(response);
             },
         });
     });
 }
 
 function showConvSts() {
-    $(document).on("click", ".showSt", function (e) {
+    $(document).on("click", ".st_conv", function (e) {
         e.preventDefault();
-        $(".showSt").addClass("active_link");
-        $(".showAc").removeClass("active_link");
-        $(".showAe").removeClass("active_link");
         $.ajax({
-            url: "./controllers/ConvController.php",
+            url: "./controllers/Ajax.php",
             type: "POST",
-            data: { action: "showSts" },
+            data: { action: "showCvs" },
             dataType: "json",
-            beforeSend: function () {
-                showLoadingSpinner();
-            },
             success: function (data) {
                 var countLicence = data.countLicence[0].countLicence;
                 var countMaster = data.countMaster[0].countMaster;
@@ -265,31 +202,99 @@ function showConvSts() {
                 $("#fils").html("");
                 $("#fils").css("display", "none");
                 var chart =
-                    "<canvas id='myChart' style='background-color: #f5f5f5;max-width: 80%;max-heigth: 60%'></canvas>";
-                $("#section__content").html(chart);
+                    "<canvas class='rounded-2' id='myChart' style='background-color: #f1f1f1;max-width: 60%;max-heigth: 60%'></canvas>";
+                $("#st_content").html(chart);
+
+                var ctx = document.getElementById("myChart").getContext("2d");
+                var ConvsChart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: ["Licence", "Master", "Ingénieur"],
+                        datasets: [
+                        {
+                            label: "Licence",
+                            data: [countLicence, 0, 0],
+                            backgroundColor: "rgba(255, 203, 7, 0.3)",
+                            borderColor: "rgba(255, 203, 7, 1)",
+                            borderWidth: 1,
+                        },
+                        {
+                            label: "Master",
+                            data: [0, countMaster, 0],
+                            backgroundColor: "rgba(33, 140, 243, 0.3)",
+                            borderColor: "rgba(33, 140, 243, 1)",
+                            borderWidth: 1,
+                        },
+                        {
+                            label: "Ingénieur",
+                            data: [0, 0, countIngenieur],
+                            backgroundColor: "rgba(76, 225, 80, 0.3)",
+                            borderColor: "rgba(76, 225, 80, 1)",
+                            borderWidth: 1,
+                        },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                        x: {
+                            indexAxis: 'y',
+                        }
+                        },
+                    },
+                });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                Swal.fire({
+                    icon: "error",
+                    title: "Erreur",
+                    text: "Une erreur est survenue",
+                });
+            },
+        });
+    });
+}
+
+
+function showEtudSts() {
+    $(document).on("click", ".st_etud", function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "./controllers/Ajax.php",
+            type: "POST",
+            data: { action: "showEtuds" },
+            dataType: "json",
+            success: function (data) {
+                var countMasc = data.countMasc[0].countMasc;
+                var countFem  = data.countFem[0].countFem;
+
+                $("#fils").html("");
+                $("#fils").css("display", "none");
+                var chart =
+                    "<canvas class='rounded-2' id='myChart' style='background-color: #f1f1f1;max-width: 60%;max-heigth: 60%'></canvas>";
+                $("#st_content").html(chart);
 
                 var ctx = document.getElementById("myChart").getContext("2d");
                 var myChart = new Chart(ctx, {
                     type: "bar",
                     data: {
-                        labels: ["Licence", "Master", "Ingénieur"],
+                        labels: ["Masculins", "Feminins"],
                         datasets: [
                             {
-                                label: "Conventions",
-                                data: [
-                                    countLicence,
-                                    countMaster,
-                                    countIngenieur,
-                                ],
+                                label: "Étudiants ayant des conventions",
+                                data: [countMasc, countFem],
                                 backgroundColor: [
-                                    "rgba(255, 193, 7, 0.2)",
-                                    "rgba(33, 150, 243, 0.2)",
-                                    "rgba(76, 175, 80, 0.2)",
+                                    "rgba(33, 150, 243, 0.3)",
+                                    "rgba(242, 75, 181, 0.3)",
                                 ],
                                 borderColor: [
-                                    "rgba(255, 193, 7, 1)",
                                     "rgba(33, 150, 243, 1)",
-                                    "rgba(76, 175, 80, 1)",
+                                    "rgba(242, 75, 181, 1)",
                                 ],
                                 borderWidth: 1,
                                 options: { responsive: true },
@@ -313,8 +318,80 @@ function showConvSts() {
                     text: "Une erreur est survenue",
                 });
             },
-            complete: function () {
-                hideLoadingSpinner();
+        });
+    });
+}
+
+
+
+function showEntrSts() {
+    $(document).on("click", ".st_entr", function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "./controllers/Ajax.php",
+            type: "POST",
+            data: { action: "showEntrs" },
+            dataType: "json",
+            success: function (data) {
+                var countLicEntrs = data.countLicEntrs[0].countLicEntrs;
+                var countMasEntrs = data.countMasEntrs[0].countMasEntrs;
+                var countIngEntrs = data.countIngEntrs[0].countIngEntrs;
+
+                $("#fils").html("");
+                $("#fils").css("display", "none");
+                var chart =
+                    "<canvas class='rounded-2' id='myChart' style='background-color: #f1f1f1;max-width: 60%;max-heigth: 60%'></canvas>";
+                $("#st_content").html(chart);
+
+                var ctx = document.getElementById("myChart").getContext("2d");
+                var entrsChart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: ["Licence", "Master", "Ingénieur"],
+                        datasets: [
+                            {
+                                label: "Licence",
+                                data: [countLicEntrs, 0, 0],
+                                backgroundColor: "rgba(237, 17, 17, 0.3)",
+                                borderColor: "rgba(237, 17, 17, 1)",
+                                borderWidth: 1,
+                            },
+                            {
+                                label: "Master",
+                                data: [0, countMasEntrs, 0],
+                                backgroundColor: "rgba(33, 140, 243, 0.3)",
+                                borderColor: "rgba(33, 140, 243, 1)",
+                                borderWidth: 1,
+                            },
+                            {
+                                label: "Ingénieur",
+                                data: [0, 0, countIngEntrs],
+                                backgroundColor: "rgba(76, 225, 80, 0.3)",
+                                borderColor: "rgba(76, 225, 80, 1)",
+                                borderWidth: 1,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                            },
+                            x: {
+                                indexAxis: "y",
+                            },
+                        },
+                    },
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                Swal.fire({
+                    icon: "error",
+                    title: "Erreur",
+                    text: "Une erreur est survenue",
+                });
             },
         });
     });
@@ -326,9 +403,17 @@ $(function () {
         $(".top").css("display", "none");
     });
 
+    $(document).on("click", "p.st_item", function (e) {
+        e.preventDefault();
+        $(".st_item").removeClass("active");
+        $(this).addClass("active");
+    });
+
     getAllEntrs();
     showDiplomesNames();
     showAllConvs();
     showStatics();
     showConvSts();
+    showEtudSts();
+    showEntrSts();
 });

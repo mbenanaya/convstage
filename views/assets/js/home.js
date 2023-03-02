@@ -178,7 +178,12 @@ $(document).ready(function () {
                             showLoadingSpinner();
                         },
                         success: function (data) {
-                            submitButton.attr("disabled", false).html(caption);
+                            // submitButton.attr("disabled", false).html(caption);
+                            setTimeout(function () {
+                                submitButton
+                                    .attr("disabled", true)
+                                    .html("Attender...");
+                            }, 200);
                         },
                         error: function (xhr, textStatus, errorThrown) {
                             submitButton.attr("disabled", false).html(caption);
@@ -189,11 +194,11 @@ $(document).ready(function () {
                             });
                         },
                         complete: function () {
-                            setTimeout(function () {
-                                submitButton
-                                    .attr("disabled", true)
-                                    .html("Attender...");
-                            }, 100);
+                            // setTimeout(function () {
+                            //     submitButton
+                            //         .attr("disabled", true)
+                            //         .html("Attender...");
+                            // }, 100);
                             submitButton.attr("disabled", false).html(caption);
                             hideLoadingSpinner();
                         },
