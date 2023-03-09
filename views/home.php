@@ -1,7 +1,5 @@
 <?php
-
 session_start();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +12,15 @@ session_start();
 <body>
 
     <?php require_once __DIR__ . '/includes/navbar.php' ?>
-    <?= $_SESSION['prenom'];?>
+    <main>
+        <div class="container py-5">
+            <div class="container-fluid">
+                <p class="welcome text-dark text-center" style="color:red;">
+                    <?php echo "Welcome ".$_SESSION['prenom'] ." ".$_SESSION['nom']; ?>
+                </p>
+            </div>
+        </div>
+    </main>
 
     <?php require_once __DIR__ . '/includes/footer.php' ?>
 

@@ -1,14 +1,17 @@
+<?php
+session_destroy();
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <?php require_once 'views/includes/head.php' ?>
+        <?php require_once __DIR__ . '/includes/head.php' ?>
         <link rel="stylesheet" href="views/assets/css/style.css" />
 
         <title>Convention de stage</title>
     </head>
     <body>
         
-    <?php require_once 'views/includes/navbar.php' ?>
+    <?php require_once __DIR__ . '/includes/navbar.php' ?>
 
         <main>
             <div class="container py-5">
@@ -62,9 +65,9 @@
             </div>
         </main>
 
-        <?php require_once 'views/includes/footer.php' ?>
+        <?php require_once __DIR__ . '/includes/footer.php' ?>
 
-        <?php require_once 'views/includes/js_scripts.php' ?>
+        <?php require_once __DIR__ . '/includes/js_scripts.php' ?>
 
         <script src="views/assets/js/login.js"></script>
     </body>

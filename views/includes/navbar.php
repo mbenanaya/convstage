@@ -20,14 +20,17 @@
                 </li>
                 <?php
                 if (isset($_SESSION['prenom'])) {
-                    echo '
-                    <li class="nav-item ms-md-auto d-none d-md-block">
-                        <div class="navbar-nav">
-                            <a class="fst_link nav-link text-uppercase text-danger"
-                            href="#">Télécharger convention</a>
-                        </div>
-                    </li>
-                    ';
+                    $currentPage = basename($_SERVER['PHP_SELF']);
+                    if ($currentPage == 'home.php') {
+                        echo '
+                            <li class="nav-item ms-md-auto d-none d-md-block">
+                                <div class="navbar-nav">
+                                    <a class="nav-link text-white"
+                                    href="#">Télécharger Convention</a>
+                                </div>
+                            </li>
+                            ';
+                    }
                 }
                 ?>
                 <li class="nav-item ms-md-auto d-none d-md-block">

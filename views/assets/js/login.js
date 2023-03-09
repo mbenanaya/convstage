@@ -39,25 +39,29 @@ function formValidation() {
             },
 
             submitHandler: function (form) {
-                var formData = new FormData(form);
                 $.ajax({
-                    url: "./controllers/LoginController.php",
+                    url: "./controllers/EtudiantController.php",
                     type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    dataType: "text",
+                    data: $(form).serialize(),
+                    contentType:
+                        "application/x-www-form-urlencoded; charset=UTF-8",
                     success: function (response) {
-                        console.log(response);
-                        window.location.href =
-                            "views/home.php?prenom=" +response;
+                        if (response.success) {
+                            window.location.href = response.url;
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Erreur",
+                                text: response.message,
+                            });
+                        }
                     },
                     error: function (xhr, textStatus, errorThrown) {
                         console.error(textStatus, errorThrown);
                         Swal.fire({
                             icon: "error",
-                            title: "Error",
-                            text: "error found",
+                            title: "Erreur",
+                            text: textStatus,
                         });
                     },
                 });
