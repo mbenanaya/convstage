@@ -50,7 +50,8 @@ main div div.container-fluid {
 
 h2.auth {
     background-color: var(--violet);
-    border-color: var(--violet);
+    border-color: var(--violet) !important;
+    box-shadow: 0px 0px 15px 0px #000;
 }
 
 a.fst_link:hover {
@@ -76,9 +77,14 @@ input::placeholder {
 
 i.fa-solid {
     position: absolute;
-    top: 75%;
+    top: 3.4em;
     transform: translateY(-50%);
     right: 10px;
     cursor: pointer;
     color: #6c757d;
+}
+
+label.error {
+    color: red;
+    margin-left: .5rem;
 }
