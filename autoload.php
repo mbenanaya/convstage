@@ -7,10 +7,8 @@ spl_autoload_register('autoload');
 function autoload($classe_name)
 {
     $array_paths = array(
-        'database/',
-        'app/classes',
-        'models/',
-        'controllers/'
+        'controllers/',
+        'models/'
     );
 
     $parts = explode('\\',$classe_name);

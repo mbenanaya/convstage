@@ -41,21 +41,24 @@ main {
     background: url(../images/fstg.jpg) no-repeat center;
     background-size: cover;
     width: 100%;
-    /* padding-bottom: 8rem; */
+}
+main.home_main {
+    height: 85vh;
 }
 
 main div div.container-fluid {
     box-shadow: 0px 0px 20px 0px #000;
 }
 
-h2.auth {
+h3.auth {
     background-color: var(--violet);
     border-color: var(--violet) !important;
     box-shadow: 0px 0px 15px 0px #000;
 }
 
-a.fst_link:hover {
+.fst_link:hover {
     color: var(--violet) !important;
+    cursor: pointer;
 }
 
 p.forgot a {
@@ -72,19 +75,78 @@ p small a {
 }
 
 input::placeholder {
-    font-size: .9rem;
+    font-size: 0.9rem;
 }
 
 i.fa-solid {
     position: absolute;
-    top: 3.4em;
+    top: 3.3em;
     transform: translateY(-50%);
     right: 10px;
     cursor: pointer;
     color: #6c757d;
 }
 
+i.fa-caret-down,
+i.fa-caret-up {
+    position: absolute;
+    top: 1.6em;
+    transform: translateY(-50%);
+    right: 20px;
+    cursor: pointer;
+    color: var(--violet);
+    font-size: 25px;
+}
+
 label.error {
     color: red;
-    margin-left: .5rem;
+    margin-left: 0.5rem;
+}
+
+.downloadButton {
+    background-color: DodgerBlue;
+    width: 280px;
+    padding: 15px 20px;
+    font-size: 1.2rem;
+    color: white;
+    border: none;
+}
+
+.downloadButton:hover {
+    background-color: RoyalBlue;
+}
+
+input.date {
+    font-size: 0.93em;
+}
+
+#list_entr {
+    z-index: 1000;
+    min-width: 160px;
+    padding: 5px 10px;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    background-color: #fff;
+    background-clip: padding-box;
+    /* border: 1px solid #ccc; */
+    /* border-radius: 4px; */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
+
+#list_entr > li {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+#list_entr > li:hover,
+#list_entr > li:focus {
+    cursor: pointer;
+    text-decoration: none;
+    color: #262626;
+    background-color: #f5f5f5;
 }

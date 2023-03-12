@@ -1,69 +1,90 @@
 <?php
 
-require_once('./EtudiantController.php');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-class LoginController {
+require_once('../database/Database.php');
+class EtudiantController
+{
+    private $email;
+    private $password;
+    private $is_admin;
+    public $db;
+    public $conn;
 
-    public $etudiant;
-    public $email;
-    public $password;
-
-    // public function __construct($email, $password)
-    // {
-    //     $this->email = $email;
-    //     $this->password = $password;
-    // }
-
-    public function handleLogin()
+    public function __construct($email, $password)
     {
-        if (isset($_POST['connecter'])) {
-            $this->email = stripcslashes(htmlspecialchars(trim($_POST['email'])));
-            $this->password = stripcslashes(htmlspecialchars(trim($_POST['password'])));
-            $this->etudiant = new EtudiantController($this->email, $this->password);
-            $this->etudiant->authenticate();
-        }
+        global $is_admin;
+        $this->email = $email;
+        $this->password = $password;
+        $this->db = new Database;
+        $this->conn = $this->db->getConnection();
+        $this->is_admin = $is_admin;
     }
 
-    // public function index() {
-    //     // If the user is already logged in, redirect him to the special index page
-    //     if (isset($_SESSION['user'])) {
-    //         $user = $_SESSION['user'];
-    //         $this->redirectToIndex($user);
-    //     }
-        
-    //     // If the user submitted the login form, try to authenticate him
-    //     if (isset($_POST['email']) && isset($_POST['password'])) {
-    //         $email = $_POST['email'];
-    //         $password = $_POST['password'];
-            
-    //         // Create a new User object and try to authenticate the user
-    //         $user = new User($email, $password, '');
-    //         if ($user->authenticate()) {
-    //             // If the user is authenticated, store the user object in the session
-    //             $_SESSION['user'] = $user;
-    //             $this->redirectToIndex($user);
-    //         } else {
-    //             // If the user is not authenticated, show an error message
-    //             echo "Invalid email or password";
-    //         }
-    //     }
-        
-    //     // If the user did not submit the login form, show the login form
-    //     require_once 'views/login_form.php';
-    // }
-    
-    // private function redirectToIndex($user) {
-    //     // Redirect the user to the special index page according to his type
-    //     if ($user->getType() == 'student') {
-    //         header('Location: student_index.php?name=' . $user->getEmail());
-    //     } else if ($user->getType() == 'admin') {
-    //         header('Location: admin_index.php?name=' . $user->getEmail());
-    //     }
-    //     exit();
-    // }
+
+    public function authenticate()
+    {
+        header('Content-Type: application/json');
+
+        // Validate user input
+        $email = filter_var($this->email, FILTER_SANITIZE_EMAIL);
+        $password = filter_var($this->password, FILTER_SANITIZE_STRING);
+
+        $stmt = $this->conn->prepare("SELECT username FROM admin WHERE email = ? AND password = ?");
+        $stmt->bindParam(1, $email);
+        $stmt->bindParam(2, $password);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $sql = $this->conn->prepare("SELECT nom, prenom, cne, filiere FROM etudiant WHERE cne = ? AND datenaiss = ?");
+
+        $sql->bindParam(1, $email);
+        $sql->bindParam(2, $password);
+        $sql->execute();
+        $result = $sql->fetch(PDO::FETCH_ASSOC);
+
+
+        if ($row) {
+            session_start();
+            $_SESSION['username'] = $row['username'];
+            $url = 'admin';
+            $response = array(
+                'success' => true,
+                'url' => $url,
+            );
+        } else if($result) {
+            session_start();
+            $_SESSION['prenom'] = $result['prenom'];
+            $_SESSION['nom'] = $result['nom'];
+            $_SESSION['cne'] = $result['cne'];
+            $_SESSION['filiere'] = $result['filiere'];
+            $url = 'home';
+            $response = array(
+                'success' => true,
+                'url' => $url,
+            );
+        }
+        else {
+            $response = array(
+                'success' => false,
+                'message' => 'L\'adresse email ou le mot de passe est invalide'
+            );
+        }
+        echo json_encode($response);
+        $this->conn = null;
+    }
 }
 
-$login = new LoginController;
-$login->handleLogin();
+
+function handleLogin()
+{
+    if (isset($_POST['connecter'])) {
+        $email = stripcslashes(htmlspecialchars(trim($_POST['email'])));
+        $password = trim($_POST['password']);
+        $etContr = new EtudiantController($email, $password);
+        $etContr->authenticate();
+    }
+}
+
+handleLogin();
+

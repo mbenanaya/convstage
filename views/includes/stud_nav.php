@@ -14,14 +14,20 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item d-sm-block d-md-none">
                     <div class="navbar-nav">
-                        <a class="small fst_link nav-link text-uppercase text-white mt-2 mt-sm-0 px-1 w-50 w-sm-25"
-                            href="http://www.fstg-marrakech.ac.ma/">fstg marrakech</a>
+                        <a class="small fst_link nav-link text-white mt-2 mt-sm-0 px-1 w-50 w-sm-25"
+                            href="<?= BASE_URL ?>/logout">
+                            <!-- <i class="fa-solid fa-arrow-right-from-bracket"></i> -->
+                            Se Deconnecter 
+                        </a>
                     </div>
                 </li>
                 <li class="nav-item ms-md-auto d-none d-md-block">
                     <div class="navbar-nav">
-                        <a class="fst_link nav-link text-uppercase text-white"
-                            href="http://www.fstg-marrakech.ac.ma/">fstg marrakech</a>
+                        <a class="fst_link nav-link text-white"
+                            href="<?= BASE_URL ?>/logout">
+                            <!-- <i class="fa-solid fa-arrow-right-from-bracket"></i> -->
+                            Se Deconnecter
+                        </a>
                     </div>
                 </li>
             </ul>

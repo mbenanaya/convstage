@@ -12,7 +12,6 @@ function showPassword() {
 }
 
 function formValidation() {
-    var connectButton = $("#connecter");
     var loginForm = $("#login_form");
     loginForm
         .submit(function (e) {
@@ -22,7 +21,6 @@ function formValidation() {
             rules: {
                 email: {
                     required: true,
-                    email: true,
                 },
                 password: {
                     required: true,
@@ -31,7 +29,6 @@ function formValidation() {
             messages: {
                 email: {
                     required: "L'adresse email est obligatoire",
-                    email: "L'adresse email est invalide",
                 },
                 password: {
                     required: "Le mot de passe est obligatoire",
@@ -40,7 +37,7 @@ function formValidation() {
 
             submitHandler: function (form) {
                 $.ajax({
-                    url: "./controllers/EtudiantController.php",
+                    url: "./controllers/LoginController.php",
                     type: "POST",
                     data: $(form).serialize(),
                     contentType:
@@ -55,6 +52,7 @@ function formValidation() {
                                 text: response.message,
                             });
                         }
+                        $(form).reset();
                     },
                     error: function (xhr, textStatus, errorThrown) {
                         console.error(textStatus, errorThrown);
