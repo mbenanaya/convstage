@@ -32,7 +32,7 @@ session_destroy();
                     </div>
 
                     <p class="forgot text-center mt-3">
-                        <a href="#">Mot de passe oublié ?</a>
+                        <a href="mot-de-passe-oublie">Mot de passe oublié ?</a>
                     </p>
                     <div class="form-group d-flex justify-content-center mt-3 mb-2">
                         <button type="submit" id="connecter" name="connecter" class="btn btn-success">

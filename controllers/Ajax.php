@@ -1,13 +1,16 @@
 <?php
 
-require '../models/Entreprise.php';
+require_once '../models/Entreprise.php';
+require_once '../models/Convention.php';
 class Ajax
 {
     private $entreprise;
+    private $convention;
 
     public function __construct()
     {
         $this->entreprise = new Entreprise;
+        $this->convention = new Convention;
     }
     public function getEntrNames()
     {
@@ -18,6 +21,7 @@ class Ajax
     public function getEntInfos($id)
     {
         $data = $this->entreprise->getEntrById($id);
+        
         header('Content-Type: application/json');
         echo json_encode($data);
     }
@@ -48,10 +52,9 @@ class Ajax
                     <tr>
                 ";
         }
-        $output .= "<tbody></table>";
+        $output .= "</tbody></table>";
         echo $output;
     }
-
 
 }
 

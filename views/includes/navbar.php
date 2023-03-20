@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="convstage.fstg.uca.ma">
+        <a class="navbar-brand" href="/convstage">
             <img src="./views/assets/images/logo-fstg.jpg" class="rounded" alt="FSTG" width="170" height="65" />
         </a>
 

@@ -6,14 +6,30 @@ require_once '../models/Convention.php';
 class ConvController
 {
     private $convention;
+    private $entreprise;
 
     public function __construct()
     {
         $this->convention = new Convention;
+        $this->entreprise = new Entreprise;
     }
     public function createNewConv()
     {
+
+        $cne = stripcslashes(htmlspecialchars(trim($_POST['cne'])));
+        $nom = stripcslashes(htmlspecialchars(trim($_POST['nom'])));
+        $idConv = $cne . '_' . date('d-m-Y_H:i:s');
+        $prenom = stripcslashes(htmlspecialchars(trim($_POST['prenom'])));
+        $filiere = stripcslashes(htmlspecialchars(trim($_POST['filiere'])));
+        $nomEntr = stripcslashes(htmlspecialchars(trim($_POST['nomEntr'])));
+        $adrEntr = stripcslashes(htmlspecialchars(trim($_POST['adrEntr'])));
+        $telEntr = stripcslashes(htmlspecialchars(trim($_POST['telEntr'])));
+        $nomEncd = stripcslashes(htmlspecialchars(trim($_POST['nomEncd'])));
+        $datedebut = $_POST['datedebut'];
+        $datefin = $_POST['datefin'];
+
         $data = [
+            'idConv' => '',
             'cne' => '',
             'nom' => '',
             'prenom' => '',
@@ -28,22 +44,29 @@ class ConvController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
-                'cne' => $_POST['cne'],
-                'nom' => $_POST['nom'],
-                'prenom' => $_POST['prenom'],
-                'filiere' => $_POST['filiere'],
-                'nomEntr' => $_POST['nomEntr'],
-                'adrEntr' => $_POST['adrEntr'],
-                'telEntr' => $_POST['telEntr'],
-                'nomEncd' => $_POST['nomEncd'],
-                'datedebut' => $_POST['datedebut'],
-                'datefin' => $_POST['datefin']
+                'idConv' => $idConv,
+                'cne' => $cne,
+                'nom' => $nom,
+                'prenom' => $prenom,
+                'filiere' => $filiere,
+                'nomEntr' => $nomEntr,
+                'adrEntr' => $adrEntr,
+                'telEntr' => $telEntr,
+                'nomEncd' => $nomEncd,
+                'datedebut' => $datedebut,
+                'datefin' => $datefin
             ];
         }
-        $this->convention->addNewConv($data);
-        require_once './generate_conv.php';
-    }
 
+        header('Content-Type: application/json');
+        $this->entreprise->addNewEntr($data);
+        $ins_conv = $this->convention->addNewConv($data);
+        $response = [
+            'conv' => $ins_conv,
+        ];
+        echo json_encode($response);
+
+    }
     public function showListOfConvs()
     {
         $data = $this->convention->getAllConvs();
@@ -53,8 +76,6 @@ class ConvController
 }
 
 $conv = new ConvController;
-
-// $conv->addNewConv();
 
 if (isset($_POST['action']) && $_POST['action'] == 'showConvs') {
     $conv->showListOfConvs();

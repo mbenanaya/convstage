@@ -36,8 +36,8 @@ class EtudiantController
         $stmt->bindParam(2, $password);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $sql = $this->conn->prepare("SELECT nom, prenom, cne, filiere FROM etudiant WHERE cne = ? AND datenaiss = ?");
-
+        $sql = $this->conn->prepare("SELECT nom, prenom, cne, filiere FROM etudiant WHERE cne = ? AND DATE_FORMAT(datenaiss, '%d/%m/%Y') = ?");
+        // DATE_FORMAT(datedebut, '%d/%m/%Y') AS datedebut
         $sql->bindParam(1, $email);
         $sql->bindParam(2, $password);
         $sql->execute();

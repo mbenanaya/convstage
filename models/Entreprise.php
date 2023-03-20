@@ -42,7 +42,33 @@ class Entreprise
         return $rows;
     }
 
-    
+    public function addNewEntr($data)
+    {
+        $sql = $this->conn->prepare("SELECT * FROM entreprise WHERE nomEntr = :nomEntr AND adrEntr = :adrEntr AND telEntr = :telEntr AND nomEncd = :nomEncd");
+        $sql->execute(array(':nomEntr' => $data['nomEntr'], ':adrEntr' => $data['adrEntr'], ':telEntr' => $data['telEntr'], ':nomEncd' => $data['nomEncd']));
+
+        if ($sql->rowCount() == 0) {
+            try {
+
+                $stmt = $this->conn->prepare("INSERT INTO entreprise (nomEntr, adrEntr, telEntr, nomEncd) VALUES (:nomEntr, :adrEntr, :telEntr, :nomEncd)");
+
+                $stmt->bindParam(':nomEntr', $data['nomEntr']);
+                $stmt->bindParam(':adrEntr', $data['adrEntr']);
+                $stmt->bindParam(':telEntr', $data['telEntr']);
+                $stmt->bindParam(':nomEncd', $data['nomEncd']);
+
+                if ($stmt->execute()) {
+                    return 'done';
+                } else {
+                    throw new Exception('Erreur');
+                }
+
+            } catch (PDOException $e) {
+                throw new Exception('Erreur');
+            }
+        }
+    }
+
 }
 
 // $ob = new Entreprise;

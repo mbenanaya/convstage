@@ -8,6 +8,9 @@ if (!isset($_SESSION['prenom'])) {
 
 <head>
     <?php include __DIR__ . '/includes/head.php' ?>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+    <script src="./views/assets/js/spin.umd.js"></script>
+    <script src="./views/assets/js/spinner.js"></script> 
     <title>Convention de stage</title>
 </head>
 
@@ -27,7 +30,7 @@ if (!isset($_SESSION['prenom'])) {
             </div>
         </div>
         <div class="d-flex justify-content-center pt-5 pb-5">
-            <button type="button" class="btn  downloadButton" data-bs-toggle="modal" data-bs-target="#downloadModal"><i
+            <button type="button" class="btn downloadButton" data-bs-toggle="modal" data-bs-target="#downloadModal"><i
                     class="fa fa-download"></i> Télécharger Convention</button>
 
             <!-- Modal -->
@@ -40,71 +43,77 @@ if (!isset($_SESSION['prenom'])) {
                         </div>
                         <div class="modal-body">
                             <form id="conv_form" style="font-size: .96rem">
-                                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 p-3">
+                                <div
+                                    class="infos row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 py-3 mx-1 rounded-3">
                                     <!-- Données d'étudiant -->
                                     <div class="form-group col">
-                                        <label for="nom">Nom</label>
+                                        <label class="mb-2" for="nom">Nom</label>
                                         <input class="form-control" type="text" name="nom" id="nom"
                                             value="<?= $_SESSION['nom'] ?>">
                                     </div>
                                     <div class="form-group col mt-2 mt-sm-0">
-                                        <label for="prenom">Prénom</label>
+                                        <label class="mb-2" for="prenom">Prénom</label>
                                         <input class="form-control" type="text" name="prenom" id="prenom"
                                             value="<?= $_SESSION['prenom'] ?>">
                                     </div>
 
                                     <div class="form-group col mt-2 mt-sm-3 mt-md-0">
-                                        <label for="cne">CNE</label>
+                                        <label class="mb-2" for="cne">CNE</label>
                                         <input class="form-control" type="text" name="cne" id="cne"
                                             value="<?= $_SESSION['cne'] ?>">
                                     </div>
 
                                     <div class="form-group col mt-2 mt-sm-3 mt-md-3 mt-lg-0">
-                                        <label for="filiere">Filière</label>
+                                        <label class="mb-2" for="filiere">Filière</label>
                                         <input class="form-control" type="text" name="filiere" id="filiere"
                                             value="<?= $_SESSION['filiere'] ?>">
                                     </div>
 
                                     <div class="form-group col mt-2 mt-sm-3 mt-md-3 mt-lg-3">
-                                        <label for="datedebut">Date debut</label>
-                                        <input class="form-control date ps-md-2" type="date" name="datedebut" id="datedebut">
+                                        <label class="mb-2" for="datedebut">Date debut</label>
+                                        <input class="form-control date ps-md-2 date-input" type="date" name="datedebut"
+                                            id="datedebut">
                                     </div>
 
                                     <div class="form-group col mt-2 mt-sm-3 mt-md-3 mt-lg-3">
-                                        <label for="datefin">Date fin</label>
-                                        <input class="form-control date ps-md-2" type="date" name="datefin" id="datefin">
+                                        <label class="mb-2" for="datefin">Date fin</label>
+                                        <input class="form-control date ps-md-2 date-input" type="date" name="datefin"
+                                            id="datefin">
                                     </div>
                                 </div>
                                 <hr />
-                                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4 p-3">
+                                <div
+                                    class="infos row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4 py-3 mx-1 rounded-3">
                                     <!-- Données d'entreprise -->
                                     <div class="entrNom form-group col position-relative">
-                                        <label for="nomEntr">Nom d'entreprise</label>
+                                        <label class="mb-2" for="nomEntr">Nom d'entreprise</label>
                                         <input class="form-control" type="text" name="nomEntr" id="nomEntr">
                                         <i class="fa-solid fa-caret-down" id="showEntrName" name="showEntrName"></i>
-                                        <ul class="col list-unstyled border rounded-3 z-3 mt-2" id="list_entr">
-                                        </ul>
+                                        <ul class="col list-unstyled position-absolute border rounded-3 z-3 mt-2"
+                                            id="list_entr"></ul>
                                     </div>
 
                                     <div class="form-group col mt-2 mt-sm-0">
-                                        <label for="adrEntr">Adresse d'entreprise</label>
+                                        <label class="mb-2" for="adrEntr">Adresse d'entreprise</label>
                                         <input class="form-control" type="text" name="adrEntr" id="adrEntr">
                                     </div>
 
                                     <div class="form-group col mt-2 mt-sm-3 mt-md-3 mt-lg-0">
-                                        <label for="telEntr">Téléphone d'entreprise</label>
+                                        <label class="mb-2" for="telEntr">Téléphone d'entreprise</label>
                                         <input class="form-control" type="text" name="telEntr" id="telEntr">
                                     </div>
 
                                     <div class="form-group col mt-2 mt-sm-3 mt-md-3 mt-lg-0">
-                                        <label for="nomEncd">Nom d'encadrant</label>
+                                        <label class="mb-2" for="nomEncd">Nom d'encadrant</label>
                                         <input class="form-control" type="text" name="nomEncd" id="nomEncd">
                                     </div>
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Annuler</button>
-                                    <button type="submit" class="btn btn-success">Télécharger</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Annuler</button>
+                                    <button type="submit" id="crCnvButt" name="crCnvButt"
+                                        class="btn btn-success">Télécharger</button>
                                 </div>
 
                             </form>
@@ -117,7 +126,7 @@ if (!isset($_SESSION['prenom'])) {
     </main>
 
     <?php require __DIR__ . '/includes/footer.php' ?>
-
+    
     <?php require __DIR__ . '/includes/js_scripts.php' ?>
 
     <script src="./views/assets/js/home.js"></script>

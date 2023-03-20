@@ -52,7 +52,7 @@ function formValidation() {
                                 text: response.message,
                             });
                         }
-                        $(form).reset();
+                        $(form).trigger("reset");
                     },
                     error: function (xhr, textStatus, errorThrown) {
                         console.error(textStatus, errorThrown);

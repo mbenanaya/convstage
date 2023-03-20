@@ -15,7 +15,7 @@ if (!isset($_SESSION['username'])) {
 
     <?php include __DIR__ . '/includes/admin_nav.php' ?>
     <main class="home_main">
-        <div class="container py-5" id="main__content">
+        <div class="row table-responsive py-5 px-3" id="main__content">
 
         </div>
     </main>
