@@ -6,7 +6,7 @@ require_once './controllers/HomeController.php';
 
 $home = new HomeController();
 
-$pages = ['index','home','admin','logout','mot-de-passe-oublie'];
+$pages = ['index','home','admin','logout','mot-de-passe-oublie','reset-password'];
 
 if (isset($_GET['page'])) {
     if (in_array($_GET['page'], $pages)) {

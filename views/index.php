@@ -14,20 +14,20 @@ session_destroy();
     <?php include __DIR__ . '/includes/navbar.php' ?>
 
     <main>
-        <div class="container pt-3 pb-5">
-            <div class="container-fluid col-11 col-sm-7 col-md-6 col-lg-4 col-xl-3 col-xxl-3 bg-white p-4 rounded-4">
+        <div class="container pt-2 pb-5">
+            <div class="container-fluid col-11 col-sm-7 col-md-6 col-lg-4 col-xl-3 col-xxl-3 bg-white p-4 pb-2 rounded-4">
                 <h3 class="auth text-center text-white border rounded-3 py-3 mb-3">Authentification</h3>
                 <form id="login_form">
                     <div class="form-group mb-3">
-                        <label for="email" class="form">Adresse email</label>
-                        <input type="text" name="email" id="email" class="form-control my-2"
-                            placeholder="Entrer votre email" />
+                        <label for="email" class="form">Code Massar ou CNE :</label>
+                        <input type="text" name="email" id="email" class="form-control px-2 my-2"
+                            placeholder="Tapez votre Code Massar ou CNE" />
                     </div>
 
                     <div class="form-group position-relative">
-                        <label for="password" class="form">Mot de passe :</label>
-                        <input type="password" name="password" id="password" class="form-control my-2 pe-1"
-                            placeholder="Entrer votre mot de passe" />
+                        <label for="password" class="form">Date de Naissance :</label>
+                        <input type="password" name="password" id="password" class="form-control my-2 ps-2 pe-1"
+                            placeholder="Exemple : 25/01/99" />
                         <i class="fa-solid fa-eye" id="show-password"></i>
                     </div>
 

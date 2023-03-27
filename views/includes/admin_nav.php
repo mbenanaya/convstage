@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="convstage.fstg.uca.ma">
-            <img src="./views/assets/images/logo-fstg.jpg" class="rounded" alt="FSTG" width="170" height="65" />
+            <img src="./views/assets/images/logo-fstg.jpg" alt="FSTG" width="200" height="87" />
         </a>
 
         <div class="d-flex flex-row flex-wrap justify-content-between align-items-center mt-3 mt-sm-0 mt-md-0">
@@ -31,19 +31,19 @@
                 
                 <li class="nav-item d-sm-block d-md-none w-25">
                     <div class="navbar-nav">
-                        <p class="fst_link nav-link text-white px-1" id="showAc">Conventions</p>
+                        <p class="fst_link showAc nav-link text-white px-1" id="showAc">Conventions</p>
                     </div>
                 </li>
 
                 <li class="nav-item d-sm-block d-md-none w-25">
                     <div class="navbar-nav">
-                        <p class="fst_link nav-link text-white px-1" id="showAe">Entreprises</p>
+                        <p class="fst_link showAe nav-link text-white px-1" id="showAe">Entreprises</p>
                     </div>
                 </li>
 
                 <li class="nav-item d-sm-block d-md-none">
                     <div class="navbar-nav">
-                        <a class="small fst_link nav-link text-white px-1 w-50 w-sm-25" href="<?= BASE_URL ?>/logout">
+                        <a class="small fst_link nav-link text-white px-1 w-50 w-sm-25" href="logout">
                             Se Deconnecter
                         </a>
                     </div>
@@ -63,19 +63,19 @@
 
                 <li class="nav-item ms-md-auto d-none d-md-block">
                     <div class="navbar-nav">
-                        <p class="fst_link nav-link text-white" id="showAc">Conventions</p>
+                        <p class="fst_link showAc nav-link text-white" id="showAc">Conventions</p>
                     </div>
                 </li>
 
                 <li class="nav-item ms-md-auto d-none d-md-block">
                     <div class="navbar-nav">
-                        <p class="fst_link nav-link text-white" id="showAe">Entreprises</p>
+                        <p class="fst_link showAe nav-link text-white" id="showAe">Entreprises</p>
                     </div>
                 </li>
 
                 <li class="nav-item ms-md-auto d-none d-md-block">
                     <div class="navbar-nav">
-                        <a class="fst_link nav-link text-white" href="<?= BASE_URL ?>/logout">
+                        <a class="fst_link nav-link text-white" href="logout">
                             Se Deconnecter
                         </a>
                     </div>

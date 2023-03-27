@@ -90,7 +90,7 @@ CREATE TABLE `etudiant` (
   `prenom` varchar(20) NOT NULL,
   `cin` varchar(10) NOT NULL,
   `datenaiss` date NOT NULL,
-  `filiere` varchar(10) NOT NULL,
+  `diplome` varchar(10) NOT NULL,
   `email` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -98,7 +98,7 @@ CREATE TABLE `etudiant` (
 -- Dumping data for table `etudiant`
 --
 
-INSERT INTO `etudiant` (`cne`, `apogee`, `nom`, `prenom`, `cin`, `datenaiss`, `filiere`, `email`) VALUES
+INSERT INTO `etudiant` (`cne`, `apogee`, `nom`, `prenom`, `cin`, `datenaiss`, `diplome`, `email`) VALUES
 ('G11223344', 199924, 'BEN-ANAYA', 'Mouhcine', 'Y112233', '1999-01-25', 'DEVOWFS', 'bamouhcine91@gmail.com');
 
 --

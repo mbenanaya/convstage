@@ -7,7 +7,6 @@
 
 html {
     height: 100vh;
-    /* width: 100vw; */
     overflow-x: clip;
 }
 
@@ -22,7 +21,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
     height: 10px;
 }
 
@@ -39,10 +38,17 @@ body {
     background-color: #5f5df3;
 }
 
+@media screen and (max-width: 425px) {
+    ::-webkit-scrollbar {
+        width: 0;
+    }
+}
+
 main {
     background: url(../images/fstg.jpg) no-repeat center;
     background-size: cover;
     width: 100%;
+    height: 90vh;
 }
 main.home_main {
     height: 85vh;
@@ -58,9 +64,31 @@ h3.auth {
     box-shadow: 0px 0px 15px 0px #000;
 }
 
+.fst_link {
+    transition: all 0.2s ease;
+}
+
 .fst_link:hover {
     color: var(--violet) !important;
+    text-shadow: 0 0 2px #ff0000, 0 0 2px #0000ff;
     cursor: pointer;
+}
+
+.active {
+    color: var(--violet) !important;
+    text-shadow: 0 0 2px #ff0000, 0 0 2px #0000ff !important;
+    border-bottom: 2px solid var(--violet);
+    transition: border-bottom 0.1s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+    .showAe {
+        width: 95px;
+    }
+
+    .showAc {
+        width: 100px;
+    }
 }
 
 p.forgot a {
@@ -70,6 +98,7 @@ p.forgot a {
 
 p a:hover {
     color: var(--orange);
+    text-shadow: 0 0 2px var(--orange);
 }
 
 p small a {
@@ -82,7 +111,7 @@ input::placeholder {
 
 i.fa-solid {
     position: absolute;
-    top: 3.3em;
+    top: 3.2em;
     transform: translateY(-50%);
     right: 10px;
     cursor: pointer;
@@ -103,7 +132,29 @@ i.fa-caret-up {
 
 label.error {
     color: red;
-    margin-left: 0.5rem;
+    margin-left: 0.25rem;
+    margin-top: 0.1rem;
+}
+
+label small {
+    color: #21ac6b !important;
+}
+
+.writing {
+    font-size: 22px;
+    color: #21ac6b;
+}
+
+#connecter,
+#crCnvButt {
+    transition: all 0.2s ease-in-out;
+}
+
+#connecter:hover,
+#crCnvButt:hover {
+    background-color: #21ac6b;
+    border-color: #21ac6b;
+    box-shadow: 0px 0px 1px 2px #21ac6b;
 }
 
 .downloadButton {
@@ -116,7 +167,9 @@ label.error {
 }
 
 .downloadButton:hover {
+    color: white;
     background-color: RoyalBlue;
+    box-shadow: 0 0 3px 5px var(--violet);
 }
 
 div.infos {

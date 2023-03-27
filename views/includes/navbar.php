@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/convstage">
-            <img src="./views/assets/images/logo-fstg.jpg" class="rounded" alt="FSTG" width="170" height="65" />
+            <img src="./views/assets/images/logo-fstg.jpg" id="fst_logo" alt="FSTG" width="200" height="87" />
         </a>
 
         <!-- Responsive toggler -->

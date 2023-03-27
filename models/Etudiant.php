@@ -8,11 +8,11 @@ class Etudiant
     private $prenom;
     private $cne;
     private $cin;
-    private $filiere;
+    private $diplome;
     private $datedebut;
     private $datefin;
 
-    public function __construct($email, $datenaiss, $nom, $prenom, $cne, $cin, $filiere, $datedebut, $datefin)
+    public function __construct($email, $datenaiss, $nom, $prenom, $cne, $cin, $diplome, $datedebut, $datefin)
     {
         $this->email = $email;
         $this->datenaiss = $datenaiss;
@@ -20,7 +20,7 @@ class Etudiant
         $this->prenom = $prenom;
         $this->cne = $cne;
         $this->cin = $cin;
-        $this->filiere = $filiere;
+        $this->diplome = $diplome;
         $this->datedebut = $datedebut;
         $this->datefin = $datefin;
     }
@@ -55,9 +55,9 @@ class Etudiant
     {
         return $this->cin;
     }
-    public function getFiliere()
+    public function getdiplome()
     {
-        return $this->filiere;
+        return $this->diplome;
     }
 
     public function getDatedebut()

@@ -36,8 +36,7 @@ class EtudiantController
         $stmt->bindParam(2, $password);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $sql = $this->conn->prepare("SELECT nom, prenom, cne, filiere FROM etudiant WHERE cne = ? AND DATE_FORMAT(datenaiss, '%d/%m/%Y') = ?");
-        // DATE_FORMAT(datedebut, '%d/%m/%Y') AS datedebut
+        $sql = $this->conn->prepare("SELECT nom, prenom, cne, diplome FROM etudiant WHERE cne = ? AND DATE_FORMAT(datenaiss, '%d/%m/%y') = ?");
         $sql->bindParam(1, $email);
         $sql->bindParam(2, $password);
         $sql->execute();
@@ -52,19 +51,18 @@ class EtudiantController
                 'success' => true,
                 'url' => $url,
             );
-        } else if($result) {
+        } else if ($result) {
             session_start();
             $_SESSION['prenom'] = $result['prenom'];
             $_SESSION['nom'] = $result['nom'];
             $_SESSION['cne'] = $result['cne'];
-            $_SESSION['filiere'] = $result['filiere'];
+            $_SESSION['diplome'] = $result['diplome'];
             $url = 'home';
             $response = array(
                 'success' => true,
                 'url' => $url,
             );
-        }
-        else {
+        } else {
             $response = array(
                 'success' => false,
                 'message' => 'L\'adresse email ou le mot de passe est invalide'
@@ -87,4 +85,3 @@ function handleLogin()
 }
 
 handleLogin();
-

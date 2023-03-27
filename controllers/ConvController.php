@@ -20,7 +20,9 @@ class ConvController
         $nom = stripcslashes(htmlspecialchars(trim($_POST['nom'])));
         $idConv = $cne . '_' . date('d-m-Y_H:i:s');
         $prenom = stripcslashes(htmlspecialchars(trim($_POST['prenom'])));
-        $filiere = stripcslashes(htmlspecialchars(trim($_POST['filiere'])));
+        $diplome = stripcslashes(htmlspecialchars(trim($_POST['diplome'])));
+        $intitule = stripcslashes(htmlspecialchars(trim($_POST['intitule'])));
+        $description = stripcslashes(htmlspecialchars(trim($_POST['description'])));
         $nomEntr = stripcslashes(htmlspecialchars(trim($_POST['nomEntr'])));
         $adrEntr = stripcslashes(htmlspecialchars(trim($_POST['adrEntr'])));
         $telEntr = stripcslashes(htmlspecialchars(trim($_POST['telEntr'])));
@@ -33,7 +35,9 @@ class ConvController
             'cne' => '',
             'nom' => '',
             'prenom' => '',
-            'filiere' => '',
+            'diplome' => '',
+            'intitule' => '',
+            'description' => '',
             'nomEntr' => '',
             'adrEntr' => '',
             'telEntr' => '',
@@ -48,7 +52,9 @@ class ConvController
                 'cne' => $cne,
                 'nom' => $nom,
                 'prenom' => $prenom,
-                'filiere' => $filiere,
+                'diplome' => $diplome,
+                'intitule' => $intitule,
+                'description' => $description,
                 'nomEntr' => $nomEntr,
                 'adrEntr' => $adrEntr,
                 'telEntr' => $telEntr,
@@ -67,9 +73,37 @@ class ConvController
         echo json_encode($response);
 
     }
-    public function showListOfConvs()
+    public function showdiplomes()
     {
-        $data = $this->convention->getAllConvs();
+        $diplomes = [];
+        $licenceData = $this->convention->getDipsLicence();
+        $masterData = $this->convention->getDipsMaster();
+        $ingenieurData = $this->convention->getDipsIngenieur();
+
+        if (!empty($licenceData)) {
+            $diplomes['Licence'][] = $licenceData;
+        }
+
+        if (!empty($masterData)) {
+            $diplomes['Master'][] = $masterData;
+        }
+
+        if (!empty($ingenieurData)) {
+            $diplomes['Ingenieur'][] = $ingenieurData;
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($diplomes, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function showListOfConvs($f)
+    {
+        $data = [];
+        if ($f === "Tous") {
+            $data = $this->convention->getAllConvs();
+        } else {
+            $data = $this->convention->getConvBydiplome($f);
+        }
         header('Content-Type: application/json');
         echo json_encode($data);
     }
@@ -77,8 +111,14 @@ class ConvController
 
 $conv = new ConvController;
 
+
 if (isset($_POST['action']) && $_POST['action'] == 'showConvs') {
-    $conv->showListOfConvs();
+    $conv->showdiplomes();
+}
+
+if (isset($_POST['action']) && $_POST['action'] == 'showFiltered') {
+    $fil = $_POST['diplome'];
+    $conv->showListOfConvs($fil);
 }
 
 if (isset($_POST['crCnvButt'])) {

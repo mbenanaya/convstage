@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $("#list_entr").hide();
 
     $(".close").click(function () {
@@ -88,7 +87,7 @@ $(document).ready(function () {
     function createConv() {
         var convForm = $("#conv_form");
         var submitButton = $("#crCnvButt");
-        // var cne, nom;
+        var cne, nom;
         convForm
             .submit(function (e) {
                 e.preventDefault();
@@ -106,13 +105,19 @@ $(document).ready(function () {
                     cne: {
                         required: true,
                     },
-                    filiere: {
+                    diplome: {
                         required: true,
                     },
                     datedebut: {
                         required: true,
                     },
                     datefin: {
+                        required: true,
+                    },
+                    intitule: {
+                        required: true,
+                    },
+                    description: {
                         required: true,
                     },
                     nomEntr: {
@@ -141,9 +146,9 @@ $(document).ready(function () {
                         beforeSend: function () {
                             submitButton
                                 .attr("disabled", true)
-                                .html("Attender...");
+                                .html("Attendez...");
                             showLoadingSpinner();
-                        },
+                        },                        
                         success: function (data) {
                             submitButton.attr("disabled", false).html(caption);
                         },
@@ -160,7 +165,7 @@ $(document).ready(function () {
                                 submitButton
                                     .attr("disabled", true)
                                     .html("Attender...");
-                            }, 500);
+                            }, 100);
                             submitButton.attr("disabled", false).html(caption);
                             hideLoadingSpinner();
                         },

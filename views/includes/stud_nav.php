@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="convstage.fstg.uca.ma">
-            <img src="./views/assets/images/logo-fstg.jpg" class="rounded" alt="FSTG" width="170" height="65" />
+            <img src="./views/assets/images/logo-fstg.jpg" alt="FSTG" width="200" height="87" />
         </a>
 
         <!-- Responsive toggler -->
@@ -15,8 +15,7 @@
                 <li class="nav-item d-sm-block d-md-none">
                     <div class="navbar-nav">
                         <a class="small fst_link nav-link text-white mt-2 mt-sm-0 px-1 w-50 w-sm-25"
-                            href="<?= BASE_URL ?>/logout">
-                            <!-- <i class="fa-solid fa-arrow-right-from-bracket"></i> -->
+                            href="logout">
                             Se Deconnecter 
                         </a>
                     </div>
@@ -24,8 +23,7 @@
                 <li class="nav-item ms-md-auto d-none d-md-block">
                     <div class="navbar-nav">
                         <a class="fst_link nav-link text-white"
-                            href="<?= BASE_URL ?>/logout">
-                            <!-- <i class="fa-solid fa-arrow-right-from-bracket"></i> -->
+                            href="logout">
                             Se Deconnecter
                         </a>
                     </div>
