@@ -138,7 +138,7 @@ class Table extends AbstractFrameReflower
             // 3. Percentage widths have been specified.  In this case we normalize
             // the percentage values and try to assign widths as fractions of
             // the table width. Absolute column widths are fully satisfied and
-            // any remaining space is evenly distributed among all auto columns.
+            // any resectioning space is evenly distributed among all auto columns.
 
             // Case 1:
             if ($percent_used == 0 && count($auto)) {
@@ -342,10 +342,10 @@ class Table extends AbstractFrameReflower
             $v = $v / 2;
             $h = $h / 2;
 
-            $style->set_used("padding_left", (float)$style->length_in_pt($style->padding_left, $cb["w"]) + $h);
-            $style->set_used("padding_right", (float)$style->length_in_pt($style->padding_right, $cb["w"]) + $h);
-            $style->set_used("padding_top", (float)$style->length_in_pt($style->padding_top, $cb["w"]) + $v);
-            $style->set_used("padding_bottom", (float)$style->length_in_pt($style->padding_bottom, $cb["w"]) + $v);
+            $style->set_used("padding_left", (float) $style->length_in_pt($style->padding_left, $cb["w"]) + $h);
+            $style->set_used("padding_right", (float) $style->length_in_pt($style->padding_right, $cb["w"]) + $h);
+            $style->set_used("padding_top", (float) $style->length_in_pt($style->padding_top, $cb["w"]) + $v);
+            $style->set_used("padding_bottom", (float) $style->length_in_pt($style->padding_bottom, $cb["w"]) + $v);
         }
 
         $this->_assign_widths();
@@ -381,11 +381,11 @@ class Table extends AbstractFrameReflower
         [$x, $y] = $frame->get_position();
 
         // Determine the content edge
-        $offset_x = (float)$left + (float)$style->length_in_pt([
+        $offset_x = (float) $left + (float) $style->length_in_pt([
             $style->padding_left,
             $style->border_left_width
         ], $cb["w"]);
-        $offset_y = (float)$style->length_in_pt([
+        $offset_y = (float) $style->length_in_pt([
             $style->margin_top,
             $style->border_top_width,
             $style->padding_top
@@ -416,7 +416,7 @@ class Table extends AbstractFrameReflower
             if (!$page->in_nested_table()) {
                 // Check if a split has occurred
                 $page->check_page_break($child);
-    
+
                 if ($page->is_full()) {
                     break;
                 }

@@ -17,7 +17,7 @@ if (!isset($_SESSION['prenom'])) {
 <body>
 
     <?php include __DIR__ . '/includes/stud_nav.php' ?>
-    <main class="home_main">
+    <section class="home_section">
         <div class="d-flex justify-content-center py-3">
             <div class="alert alert-success alert-dismissible fade show row py-3 mx-1" role="alert">
                 <h2 class="fw-normal fs-4 col-12 mb-0 text-center p-0">
@@ -34,7 +34,7 @@ if (!isset($_SESSION['prenom'])) {
                     class="fa fa-download"></i> Télécharger Convention</button>
 
             <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="title" aria-hidden="true">
-                <div class="modal-dialog modal-md modal-lg">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="title">Télécharger Convention</h1>
@@ -100,7 +100,7 @@ if (!isset($_SESSION['prenom'])) {
                                         class="writing fw-bold">&#x270D;</span>
                                 </label>
                                 <div
-                                    class="infos row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4 py-3 mx-1 rounded-3">
+                                    class="infos row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 py-3 mx-1 rounded-3">
                                     <!-- Données d'entreprise -->
                                     <div class="entrNom form-group col position-relative">
                                         <label class="mb-2" for="nomEntr">Nom d'entreprise</label>
@@ -120,9 +120,42 @@ if (!isset($_SESSION['prenom'])) {
                                         <input class="form-control" type="text" name="telEntr" id="telEntr">
                                     </div>
 
-                                    <div class="form-group col mt-2 mt-sm-3 mt-md-3 mt-lg-0">
+                                    <div class="form-group col mt-2 mt-sm-3 mt-md-3">
                                         <label class="mb-2" for="nomEncd">Nom d'encadrant</label>
                                         <input class="form-control" type="text" name="nomEncd" id="nomEncd">
+                                    </div>
+                                    <div class="form-group col mt-2 mt-sm-3 mt-md-3">
+                                        <label class="mb-2" for="qltEncd">Qualité d'encadrant</label>
+                                        <input class="form-control" type="text" name="qltEncd" id="qltEncd">
+                                    </div>
+
+                                    <div class="form-group col mt-2 mt-sm-3 mt-md-3">
+                                        <label class="mb-2" for="emailEncd">Email d'encadrant</label>
+                                        <input class="form-control" type="text" name="emailEncd" id="emailEncd">
+                                    </div>
+                                </div>
+                                <div class="border-bottom border-2 border-secondary my-3 mx-1"></div>
+                                <div
+                                    class="infos row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 py-3 mx-1 rounded-3">
+                                    <div class="form-group col mt-2 mt-sm-3 mt-md-3 mt-lg-0">
+                                        <label class="mb-2" for="nomResp">Responsable du stage</label>
+                                        <input class="form-control" type="text" name="nomResp" id="nomResp"
+                                            placeholder="Nom du responsable">
+                                    </div>
+
+                                    <div class="form-group col mt-2 mt-sm-3 mt-md-3 mt-lg-0">
+                                        <label class="mb-2" for="qltResp">Qualité du responsable</label>
+                                        <input class="form-control" type="text" name="qltResp" id="qltResp">
+                                    </div>
+
+                                    <div class="form-group col mt-2 mt-sm-3 mt-md-3 mt-lg-0">
+                                        <label class="mb-2" for="telResp">Téléphone du responsable</label>
+                                        <input class="form-control" type="text" name="telResp" id="telResp">
+                                    </div>
+
+                                    <div class="form-group col mt-2 mt-sm-3 mt-md-3 mt-lg-3">
+                                        <label class="mb-2" for="emailResp">Email du responsable</label>
+                                        <input class="form-control" type="text" name="emailResp" id="emailResp">
                                     </div>
                                 </div>
 
@@ -130,7 +163,7 @@ if (!isset($_SESSION['prenom'])) {
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Annuler</button>
                                     <button type="submit" id="crCnvButt" name="crCnvButt"
-                                        class="btn btn-success">Télécharger</button>
+                                        class="btn btn-success submit_button">Télécharger</button>
                                 </div>
 
                             </form>
@@ -140,7 +173,7 @@ if (!isset($_SESSION['prenom'])) {
             </div>
 
         </div>
-    </main>
+    </section>
 
     <?php require __DIR__ . '/includes/footer.php' ?>
 

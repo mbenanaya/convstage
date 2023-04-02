@@ -70,6 +70,3 @@ class Entreprise
     }
 
 }
-
-// $ob = new Entreprise;
-// var_dump($ob->getEntrByName("Onestcom"));

@@ -13,7 +13,7 @@ function showLoadingSpinner() {
         direction: 1,
         color: "#7573fc",
         fadeColor: "transparent",
-        top: "40%",
+        top: "45%",
         left: "50%",
         shadow: "0 0 1px transparent",
         zIndex: 2000000000,

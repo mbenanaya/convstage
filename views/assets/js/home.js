@@ -132,6 +132,34 @@ $(document).ready(function () {
                     nomEncd: {
                         required: true,
                     },
+                    qltEncd: {
+                        required: true,
+                    },
+                    emailEncd: {
+                        required: true,
+                        email: true,
+                    },
+                    nomResp: {
+                        required: true,
+                    },
+                    qltResp: {
+                        required: true,
+                    },
+                    telResp: {
+                        required: true,
+                    },
+                    emailResp: {
+                        required: true,
+                        email: true,
+                    },
+                },
+                messages: {
+                    emailEncd: {
+                        email: "Veuillez fournir une adresse email valide"
+                    },
+                    emailResp: {
+                        email: "Veuillez fournir une adresse email valide"
+                    }
                 },
 
                 submitHandler: function (form) {
@@ -148,7 +176,7 @@ $(document).ready(function () {
                                 .attr("disabled", true)
                                 .html("Attendez...");
                             showLoadingSpinner();
-                        },                        
+                        },
                         success: function (data) {
                             submitButton.attr("disabled", false).html(caption);
                         },

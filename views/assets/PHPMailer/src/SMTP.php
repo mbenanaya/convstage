@@ -296,17 +296,17 @@ class SMTP
                 //Normalize line breaks
                 $str = preg_replace('/\r\n|\r/m', "\n", $str);
                 echo gmdate('Y-m-d H:i:s'),
-                "\t",
+                    "\t",
                     //Trim trailing space
-                trim(
-                    //Indent for readability, except for trailing break
-                    str_replace(
-                        "\n",
-                        "\n                   \t                  ",
-                        trim($str)
-                    )
-                ),
-                "\n";
+                    trim(
+                        //Indent for readability, except for trailing break
+                        str_replace(
+                            "\n",
+                            "\n                   \t                  ",
+                            trim($str)
+                        )
+                    ),
+                    "\n";
         }
     }
 
@@ -353,7 +353,7 @@ class SMTP
         //Get any announcement
         $this->last_reply = $this->get_lines();
         $this->edebug('SERVER -> CLIENT: ' . $this->last_reply, self::DEBUG_SERVER);
-        $responseCode = (int)substr($this->last_reply, 0, 3);
+        $responseCode = (int) substr($this->last_reply, 0, 3);
         if ($responseCode === 220) {
             return true;
         }
@@ -438,7 +438,7 @@ class SMTP
         //SMTP server can take longer to respond, give longer timeout for first read
         //Windows does not have support for this timeout function
         if (strpos(PHP_OS, 'WIN') !== 0) {
-            $max = (int)ini_get('max_execution_time');
+            $max = (int) ini_get('max_execution_time');
             //Don't bother if unlimited, or if set_time_limit is disabled
             if (0 !== $max && $timeout > $max && strpos(ini_get('disable_functions'), 'set_time_limit') === false) {
                 @set_time_limit($timeout);
@@ -799,7 +799,7 @@ class SMTP
      * Send an SMTP HELO or EHLO command.
      * Used to identify the sending server to the receiving server.
      * This makes sure that client and server are in a known state.
-     * Implements RFC 821: HELO <SP> <domain> <CRLF>
+     * Implements RFC 821: HELO <SP> <dosection> <CRLF>
      * and RFC 2821 EHLO.
      *
      * @param string $host The host name or IP to connect to

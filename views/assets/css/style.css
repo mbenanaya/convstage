@@ -44,17 +44,34 @@ body {
     }
 }
 
-main {
-    background: url(../images/fstg.jpg) no-repeat center;
-    background-size: cover;
-    width: 100%;
-    height: 90vh;
-}
-main.home_main {
-    height: 85vh;
+@media screen and (max-width: 317px) {
+    .reset_cont {
+        padding: 1rem 0.45rem !important;
+    }
+    .reset_head {
+        margin: 0 0.2rem 1rem !important;
+    }
 }
 
-main div div.container-fluid {
+section {
+    background: url('../images/fstg.jpg') center/cover no-repeat scroll;
+    width: 100%;
+    min-height: 90vh;
+}
+
+section.home_section {
+    min-height: 95vh;
+}
+
+section.mdpo {
+    background: url('../images/fstg-tree.jpg') center/cover no-repeat scroll;
+}
+
+section.reset {
+    background: url('../images/background_fstg.jpg') center/cover no-repeat scroll;
+}
+
+section div div.container-fluid {
     box-shadow: 0px 0px 20px 0px #000;
 }
 
@@ -62,6 +79,10 @@ h3.auth {
     background-color: var(--violet);
     border-color: var(--violet) !important;
     box-shadow: 0px 0px 15px 0px #000;
+}
+
+.reset_head {
+    font-size: 1.46rem;
 }
 
 .fst_link {
@@ -74,11 +95,52 @@ h3.auth {
     cursor: pointer;
 }
 
-.active {
+.nav_ul li p,
+.nav_ul li a {
+    position: relative;
+}
+
+.nav_ul li p::before,
+.nav_ul li a::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: var(--violet);
+    transition: all 0.5s ease;
+}
+
+.nav_ul li p:hover::before,
+.nav_ul li a:hover::before {
+    width: 100%;
+}
+
+.nav_ul li {
+    margin: 0 5px;
+}
+
+.nav_ul li p.active_link,
+.nav_ul li a.active_link {
     color: var(--violet) !important;
     text-shadow: 0 0 2px #ff0000, 0 0 2px #0000ff !important;
-    border-bottom: 2px solid var(--violet);
-    transition: border-bottom 0.1s ease-in-out;
+}
+
+.nav_ul li p.active_link::before,
+.nav_ul li a.active_link::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--violet);
+    transition: all 0.3s ease;
+}
+
+.nav_ul li div p {
+    margin-bottom: 0.5rem !important;
 }
 
 @media screen and (max-width: 768px) {
@@ -89,6 +151,14 @@ h3.auth {
     .showAc {
         width: 100px;
     }
+
+    .showSt {
+        width: 94px;
+    }
+
+    .lo_link {
+        width: 126px !important;
+    }
 }
 
 p.forgot a {
@@ -96,7 +166,12 @@ p.forgot a {
     transition: all 0.3s ease;
 }
 
-p a:hover {
+.admin_connect {
+    transition: all 0.3s ease;
+}
+
+p a:hover,
+.admin_connect:hover {
     color: var(--orange);
     text-shadow: 0 0 2px var(--orange);
 }
@@ -116,6 +191,11 @@ i.fa-solid {
     right: 10px;
     cursor: pointer;
     color: #6c757d;
+}
+
+i.fa-solid.reset_eye {
+    right: 8px;
+    top: 3.7em !important;
 }
 
 i.fa-caret-down,
@@ -145,16 +225,14 @@ label small {
     color: #21ac6b;
 }
 
-#connecter,
-#crCnvButt {
+.submit_button {
     transition: all 0.2s ease-in-out;
 }
 
-#connecter:hover,
-#crCnvButt:hover {
-    background-color: #21ac6b;
+.submit_button:hover {
+    background-color: #25a267;
     border-color: #21ac6b;
-    box-shadow: 0px 0px 1px 2px #21ac6b;
+    box-shadow: 0px 0px 1px 3px #21ac6b;
 }
 
 .downloadButton {
@@ -164,6 +242,7 @@ label small {
     font-size: 1.2rem;
     color: white;
     border: none;
+    transition: all 0.3s ease-in-out;
 }
 
 .downloadButton:hover {

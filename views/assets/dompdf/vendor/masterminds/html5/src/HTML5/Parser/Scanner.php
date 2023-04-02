@@ -312,9 +312,9 @@ class Scanner
      *
      * This consumes characters until the EOF.
      *
-     * @return int The number of characters remaining.
+     * @return int The number of characters resectioning.
      */
-    public function remainingChars()
+    public function resectioningChars()
     {
         if ($this->char < $this->EOF) {
             $data = substr($this->data, $this->char);

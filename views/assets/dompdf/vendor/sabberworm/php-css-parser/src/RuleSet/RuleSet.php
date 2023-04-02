@@ -188,7 +188,7 @@ abstract class RuleSet implements Renderable, Commentable
 
     /**
      * Returns all rules matching the given pattern and returns them in an associative array with the rule’s name
-     * as keys. This method exists mainly for backwards-compatibility and is really only partially useful.
+     * as keys. This method exists sectionly for backwards-compatibility and is really only partially useful.
      *
      * Note: This method loses some information: Calling this (with an argument of `background-`) on a declaration block
      * like `{ background-color: green; background-color; rgba(0, 127, 0, 0.7); }` will only yield an associative array

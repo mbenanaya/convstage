@@ -51,6 +51,7 @@ $(document).ready(function () {
                         submitButton.attr("disabled", false).html(caption);
                     },
                     error: function (xhr, status, error) {
+                        console.log(status, error)
                         Swal.fire({
                             icon: "error",
                             title: "Erreur!",

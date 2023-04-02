@@ -1,6 +1,6 @@
 # Security notices relating to PHPMailer
 
-Please disclose any security issues or vulnerabilities found through [Tidelift's coordinated disclosure system](https://tidelift.com/security) or to the maintainers privately.
+Please disclose any security issues or vulnerabilities found through [Tidelift's coordinated disclosure system](https://tidelift.com/security) or to the sectiontainers privately.
 
 PHPMailer 6.4.1 and earlier contain a vulnerability that can result in untrusted code being called (if such code is injected into the host project's scope by other means). If the `$patternselect` parameter to `validateAddress()` is set to `'php'` (the default, defined by `PHPMailer::$validator`), and the global namespace contains a function called `php`, it will be called in preference to the built-in validator of the same name. Mitigated in PHPMailer 6.5.0 by denying the use of simple strings as validator function names. Recorded as [CVE-2021-3603](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2021-3603). Reported by [Vikrant Singh Chauhan](mailto:vi@hackberry.xyz) via [huntr.dev](https://www.huntr.dev/).
 
@@ -34,4 +34,3 @@ PHPMailer didn't sanitise the `$lang_path` parameter in `SetLanguage`. This wasn
 PHPMailer 1.7.2 and earlier contained a possible DDoS vulnerability reported in [CVE-2005-1807](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2005-1807).
 
 PHPMailer 1.7 and earlier (June 2003) have a possible vulnerability in the `SendmailSend` method where shell commands may not be sanitised. Reported in [CVE-2007-3215](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2007-3215).
-

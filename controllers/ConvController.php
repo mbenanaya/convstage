@@ -75,26 +75,35 @@ class ConvController
     }
     public function showdiplomes()
     {
-        $diplomes = [];
-        $licenceData = $this->convention->getDipsLicence();
-        $masterData = $this->convention->getDipsMaster();
-        $ingenieurData = $this->convention->getDipsIngenieur();
+        $diplomes = [
+            'Licence' => [],
+            'Master' => [],
+            'Ingenieur' => [],
+        ];
+        $licence = $this->convention->getDipsLicence();
+        $master = $this->convention->getDipsMaster();
+        $ingenieur = $this->convention->getDipsIngenieur();
 
-        if (!empty($licenceData)) {
-            $diplomes['Licence'][] = $licenceData;
+        if (!empty($licence)) {
+            $diplomes['Licence'] = $licence;
         }
 
-        if (!empty($masterData)) {
-            $diplomes['Master'][] = $masterData;
+        if (!empty($master)) {
+            $diplomes['Master'] = $master;
         }
 
-        if (!empty($ingenieurData)) {
-            $diplomes['Ingenieur'][] = $ingenieurData;
+        if (!empty($ingenieur)) {
+            $diplomes['Ingenieur'] = $ingenieur;
+        }
+
+        if (empty($diplomes['Licence']) && empty($diplomes['Master']) && empty($diplomes['Ingenieur'])) {
+            $diplomes['error'] = "La base est vide";
         }
 
         header('Content-Type: application/json');
         echo json_encode($diplomes, JSON_UNESCAPED_UNICODE);
     }
+
 
     public function showListOfConvs($f)
     {
@@ -107,10 +116,29 @@ class ConvController
         header('Content-Type: application/json');
         echo json_encode($data);
     }
+
+    public function showConvStats()
+    {
+        $diplomes = [
+            'countLicence' => [],
+            'countMaster' => [],
+            'countIngenieur' => [],
+        ];
+        $countLicence = $this->convention->countLicenceDips();
+        $countMaster = $this->convention->countMasterDips();
+        $countIngenieur = $this->convention->countIngenieurDips();
+        
+        $diplomes['countLicence'] = $countLicence;
+        $diplomes['countMaster'] = $countMaster;
+        $diplomes['countIngenieur'] = $countIngenieur;
+
+        header('Content-Type: application/json');
+        echo json_encode($diplomes, JSON_UNESCAPED_UNICODE);
+    }
 }
 
 $conv = new ConvController;
-
+// $conv->showConvStats();
 
 if (isset($_POST['action']) && $_POST['action'] == 'showConvs') {
     $conv->showdiplomes();
@@ -123,4 +151,12 @@ if (isset($_POST['action']) && $_POST['action'] == 'showFiltered') {
 
 if (isset($_POST['crCnvButt'])) {
     $conv->createNewConv();
+}
+
+// if (isset($_POST['showSt'])) {
+//     $conv->showConvStats();
+// }
+
+if (isset($_POST['action']) && $_POST['action'] == 'showSts') {
+    $conv->showConvStats();
 }

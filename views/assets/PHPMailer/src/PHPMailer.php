@@ -240,7 +240,7 @@ class PHPMailer
      * The hostname to use in the Message-ID header and as default HELO string.
      * If empty, PHPMailer attempts to find one with, in order,
      * $_SERVER['SERVER_NAME'], gethostname(), php_uname('n'), or the value
-     * 'localhost.localdomain'.
+     * 'localhost.localdosection'.
      *
      * @see PHPMailer::$Helo
      *
@@ -251,7 +251,7 @@ class PHPMailer
     /**
      * An ID to be used in the Message-ID header.
      * If empty, a unique id will be generated.
-     * You can set your own, but it must be in the format "<id@domain>",
+     * You can set your own, but it must be in the format "<id@dosection>",
      * as defined in RFC5322 section 3.6.4 or it will be ignored.
      *
      * @see https://tools.ietf.org/html/rfc5322#section-3.6.4
@@ -429,7 +429,7 @@ class PHPMailer
 
     /**
      * Whether to keep the SMTP connection open after each message.
-     * If this is set to true then the connection will remain open after a send,
+     * If this is set to true then the connection will resection open after a send,
      * and closing the connection will require an explicit call to smtpClose().
      * It's a good idea to use this if you are sending multiple messages as it reduces overhead.
      * See the mailing list example for how to use it.
@@ -498,13 +498,13 @@ class PHPMailer
     public $DKIM_passphrase = '';
 
     /**
-     * DKIM signing domain name.
+     * DKIM signing dosection name.
      *
      * @example 'example.com'
      *
      * @var string
      */
-    public $DKIM_domain = '';
+    public $DKIM_dosection = '';
 
     /**
      * DKIM Copy header field values for diagnostic use.
@@ -858,7 +858,7 @@ class PHPMailer
     private function mailPassthru($to, $subject, $body, $header, $params)
     {
         //Check overloading of mail function to avoid double-encoding
-        if ((int)ini_get('mbstring.func_overload') & 1) {
+        if ((int) ini_get('mbstring.func_overload') & 1) {
             $subject = $this->secureHeader($subject);
         } else {
             $subject = $this->encodeHeader($this->secureHeader($subject));
@@ -925,17 +925,17 @@ class PHPMailer
                 //Normalize line breaks
                 $str = preg_replace('/\r\n|\r/m', "\n", $str);
                 echo gmdate('Y-m-d H:i:s'),
-                "\t",
+                    "\t",
                     //Trim trailing space
-                trim(
-                    //Indent for readability, except for trailing break
-                    str_replace(
-                        "\n",
-                        "\n                   \t                  ",
-                        trim($str)
-                    )
-                ),
-                "\n";
+                    trim(
+                        //Indent for readability, except for trailing break
+                        str_replace(
+                            "\n",
+                            "\n                   \t                  ",
+                            trim($str)
+                        )
+                    ),
+                    "\n";
         }
     }
 
@@ -1103,7 +1103,7 @@ class PHPMailer
         }
         $params = [$kind, $address, $name];
         //Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
-        //Domain is assumed to be whatever is after the last @ symbol in the address
+        //Dosection is assumed to be whatever is after the last @ symbol in the address
         if (static::idnSupported() && $this->has8bitChars(substr($address, ++$pos))) {
             if ('Reply-To' !== $kind) {
                 if (!array_key_exists($address, $this->RecipientsQueue)) {
@@ -1304,14 +1304,14 @@ class PHPMailer
      */
     public function setFrom($address, $name = '', $auto = true)
     {
-        $address = trim((string)$address);
+        $address = trim((string) $address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         //Don't validate now addresses with IDN. Will be done in send().
         $pos = strrpos($address, '@');
         if (
             (false === $pos)
             || ((!$this->has8bitChars(substr($address, ++$pos)) || !static::idnSupported())
-            && !static::validateAddress($address))
+                && !static::validateAddress($address))
         ) {
             $error_message = sprintf(
                 '%s (From): %s',
@@ -1392,7 +1392,7 @@ class PHPMailer
                  * A more complex and more permissive version of the RFC5322 regex on which FILTER_VALIDATE_EMAIL
                  * is based.
                  * In addition to the addresses allowed by filter_var, also permits:
-                 *  * dotless domains: `a@b`
+                 *  * dotless dosections: `a@b`
                  *  * comments: `1234 @ local(blah) .machine .example`
                  *  * quoted elements: `'"test blah"@example.org'`
                  *  * numeric TLDs: `a@b.123`
@@ -1434,7 +1434,7 @@ class PHPMailer
     }
 
     /**
-     * Tells whether IDNs (Internationalized Domain Names) are supported or not. This requires the
+     * Tells whether IDNs (Internationalized Dosection Names) are supported or not. This requires the
      * `intl` and `mbstring` PHP extensions.
      *
      * @return bool `true` if required functions for IDN support are present
@@ -1448,9 +1448,9 @@ class PHPMailer
      * Converts IDN in given email address to its ASCII form, also known as punycode, if possible.
      * Important: Address must be passed in same encoding as currently set in PHPMailer::$CharSet.
      * This function silently returns unmodified address if:
-     * - No conversion is necessary (i.e. domain name is not an IDN, or is already in ASCII form)
+     * - No conversion is necessary (i.e. dosection name is not an IDN, or is already in ASCII form)
      * - Conversion to punycode is impossible (e.g. required PHP functions are not available)
-     *   or fails for any reason (e.g. domain contains characters not allowed in an IDN).
+     *   or fails for any reason (e.g. dosection contains characters not allowed in an IDN).
      *
      * @see PHPMailer::$CharSet
      *
@@ -1467,27 +1467,27 @@ class PHPMailer
             false !== $pos &&
             static::idnSupported()
         ) {
-            $domain = substr($address, ++$pos);
-            //Verify CharSet string is a valid one, and domain properly encoded in this CharSet.
-            if ($this->has8bitChars($domain) && @mb_check_encoding($domain, $this->CharSet)) {
-                //Convert the domain from whatever charset it's in to UTF-8
-                $domain = mb_convert_encoding($domain, self::CHARSET_UTF8, $this->CharSet);
+            $dosection = substr($address, ++$pos);
+            //Verify CharSet string is a valid one, and dosection properly encoded in this CharSet.
+            if ($this->has8bitChars($dosection) && @mb_check_encoding($dosection, $this->CharSet)) {
+                //Convert the dosection from whatever charset it's in to UTF-8
+                $dosection = mb_convert_encoding($dosection, self::CHARSET_UTF8, $this->CharSet);
                 //Ignore IDE complaints about this line - method signature changed in PHP 5.4
                 $errorcode = 0;
                 if (defined('INTL_IDNA_VARIANT_UTS46')) {
                     //Use the current punycode standard (appeared in PHP 7.2)
                     $punycode = idn_to_ascii(
-                        $domain,
+                        $dosection,
                         \IDNA_DEFAULT | \IDNA_USE_STD3_RULES | \IDNA_CHECK_BIDI |
-                            \IDNA_CHECK_CONTEXTJ | \IDNA_NONTRANSITIONAL_TO_ASCII,
+                        \IDNA_CHECK_CONTEXTJ | \IDNA_NONTRANSITIONAL_TO_ASCII,
                         \INTL_IDNA_VARIANT_UTS46
                     );
                 } elseif (defined('INTL_IDNA_VARIANT_2003')) {
                     //Fall back to this old, deprecated/removed encoding
-                    $punycode = idn_to_ascii($domain, $errorcode, \INTL_IDNA_VARIANT_2003);
+                    $punycode = idn_to_ascii($dosection, $errorcode, \INTL_IDNA_VARIANT_2003);
                 } else {
                     //Fall back to a default we don't know about
-                    $punycode = idn_to_ascii($domain, $errorcode);
+                    $punycode = idn_to_ascii($dosection, $errorcode);
                 }
                 if (false !== $punycode) {
                     return substr($address, 0, $pos) . $punycode;
@@ -1542,7 +1542,7 @@ class PHPMailer
             //and it's also used with mail() on Windows
             static::setLE(self::CRLF);
         } else {
-            //Maintain backward compatibility with legacy Linux command line mailers
+            //sectiontain backward compatibility with legacy Linux command line mailers
             static::setLE(PHP_EOL);
         }
         //Check for buggy PHP versions that add a header with an incorrect line break
@@ -1630,7 +1630,7 @@ class PHPMailer
 
             //Sign with DKIM if enabled
             if (
-                !empty($this->DKIM_domain)
+                !empty($this->DKIM_dosection)
                 && !empty($this->DKIM_selector)
                 && (!empty($this->DKIM_private_string)
                     || (!empty($this->DKIM_private)
@@ -1884,7 +1884,7 @@ class PHPMailer
         if (strpos($path, '\\\\') !== 0) {
             $readable = $readable && is_readable($path);
         }
-        return  $readable;
+        return $readable;
     }
 
     /**
@@ -2281,8 +2281,8 @@ class PHPMailer
         $PHPMAILER_LANG = [
             'authenticate' => 'SMTP Error: Could not authenticate.',
             'buggy_php' => 'Your version of PHP is affected by a bug that may result in corrupted messages.' .
-                ' To fix it, switch to sending using SMTP, disable the mail.add_x_header option in' .
-                ' your php.ini, switch to MacOS or Linux, or upgrade your PHP to version 7.0.17+ or 7.1.3+.',
+            ' To fix it, switch to sending using SMTP, disable the mail.add_x_header option in' .
+            ' your php.ini, switch to MacOS or Linux, or upgrade your PHP to version 7.0.17+ or 7.1.3+.',
             'connect_host' => 'SMTP Error: Could not connect to SMTP host.',
             'data_not_accepted' => 'SMTP Error: data not accepted.',
             'empty_message' => 'Message body empty',
@@ -2315,7 +2315,7 @@ class PHPMailer
 
         //Validate $langcode
         $foundlang = true;
-        $langcode  = strtolower($langcode);
+        $langcode = strtolower($langcode);
         if (
             !preg_match('/^(?P<lang>[a-z]{2})(?P<script>_[a-z]{4})?(?P<country>_[a-z]{2})?$/', $langcode, $matches)
             && $langcode !== 'en'
@@ -2368,7 +2368,7 @@ class PHPMailer
                         array_key_exists($matches[1], $PHPMAILER_LANG)
                     ) {
                         //Overwrite language-specific strings so we'll never have missing translation keys.
-                        $PHPMAILER_LANG[$matches[1]] = (string)$matches[3];
+                        $PHPMAILER_LANG[$matches[1]] = (string) $matches[3];
                     }
                 }
             }
@@ -2745,7 +2745,7 @@ class PHPMailer
                 if (static::ENCODING_8BIT === $this->Encoding) {
                     $result .= $this->headerLine('Content-Transfer-Encoding', static::ENCODING_8BIT);
                 }
-                //The only remaining alternatives are quoted-printable and base64, which are both 7bit compatible
+                //The only resectioning alternatives are quoted-printable and base64, which are both 7bit compatible
             } else {
                 $result .= $this->headerLine('Content-Transfer-Encoding', $this->Encoding);
             }
@@ -3236,7 +3236,8 @@ class PHPMailer
                 2 => $name,
                 3 => $encoding,
                 4 => $type,
-                5 => false, //isStringAttachment
+                5 => false,
+                //isStringAttachment
                 6 => $disposition,
                 7 => $name,
             ];
@@ -3726,7 +3727,8 @@ class PHPMailer
                 2 => static::mb_pathinfo($filename, PATHINFO_BASENAME),
                 3 => $encoding,
                 4 => $type,
-                5 => true, //isStringAttachment
+                5 => true,
+                //isStringAttachment
                 6 => $disposition,
                 7 => 0,
             ];
@@ -3799,7 +3801,8 @@ class PHPMailer
                 2 => $name,
                 3 => $encoding,
                 4 => $type,
-                5 => false, //isStringAttachment
+                5 => false,
+                //isStringAttachment
                 6 => $disposition,
                 7 => $cid,
             ];
@@ -3860,7 +3863,8 @@ class PHPMailer
                 2 => $name,
                 3 => $encoding,
                 4 => $type,
-                5 => true, //isStringAttachment
+                5 => true,
+                //isStringAttachment
                 6 => $disposition,
                 7 => $cid,
             ];
@@ -4089,7 +4093,7 @@ class PHPMailer
 
     /**
      * Get the server hostname.
-     * Returns 'localhost.localdomain' if unknown.
+     * Returns 'localhost.localdosection' if unknown.
      *
      * @return string
      */
@@ -4106,7 +4110,7 @@ class PHPMailer
             $result = php_uname('n');
         }
         if (!static::isValidHost($result)) {
-            return 'localhost.localdomain';
+            return 'localhost.localdosection';
         }
 
         return $result;
@@ -4976,7 +4980,7 @@ class PHPMailer
         //which is appended after calculating the signature
         //https://tools.ietf.org/html/rfc6376#section-3.5
         $dkimSignatureHeader = 'DKIM-Signature: v=1;' .
-            ' d=' . $this->DKIM_domain . ';' .
+            ' d=' . $this->DKIM_dosection . ';' .
             ' s=' . $this->DKIM_selector . ';' . static::$LE .
             ' a=' . $DKIMsignatureType . ';' .
             ' q=' . $DKIMquery . ';' .

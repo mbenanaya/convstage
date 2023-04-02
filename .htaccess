@@ -4,4 +4,10 @@ RewriteEngine On
 
 RewriteBase /convstage/
 
-RewriteRule ^([-a-zA-Z0-9]+)$ index.php?page=$1
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^reset-password/username=([-a-zA-Z0-9]+)$ views/reset-password.php?username=$1 [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([-a-zA-Z0-9]+)$ index.php?page=$1 [L]

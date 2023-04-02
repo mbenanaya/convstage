@@ -45,7 +45,8 @@ class AttributeTranslator
             ],
             'bgcolor' => 'background-color: %s;',
             'border' => '_set_table_border',
-            'cellpadding' => '_set_table_cellpadding', //'border-spacing: %0.2F; border-collapse: separate;',
+            'cellpadding' => '_set_table_cellpadding',
+            //'border-spacing: %0.2F; border-collapse: separate;',
             'cellspacing' => '_set_table_cellspacing',
             'frame' => [
                 'void' => 'border-style: none;',
@@ -62,9 +63,11 @@ class AttributeTranslator
             'width' => 'width: %s;',
         ],
         'hr' => [
-            'align' => '_set_hr_align', // Need to grab width to set 'left' & 'right' correctly
+            'align' => '_set_hr_align',
+            // Need to grab width to set 'left' & 'right' correctly
             'noshade' => 'border-style: solid;',
-            'size' => '_set_hr_size', //'border-width: %0.2F px;',
+            'size' => '_set_hr_size',
+            //'border-width: %0.2F px;',
             'width' => 'width: %s;',
         ],
         'div' => [
@@ -95,7 +98,7 @@ class AttributeTranslator
         'p' => [
             'align' => 'text-align: %s;',
         ],
-//    'col' => array(
+        //    'col' => array(
 //      'align'  => '',
 //      'valign' => '',
 //    ),
@@ -503,15 +506,15 @@ class AttributeTranslator
             $width = "100%";
         }
 
-        $remainder = 100 - (double)rtrim($width, "% ");
+        $resectionder = 100 - (double) rtrim($width, "% ");
 
         switch ($value) {
             case "left":
-                $style .= "; margin-right: $remainder %;";
+                $style .= "; margin-right: $resectionder %;";
                 break;
 
             case "right":
-                $style .= "; margin-left: $remainder %;";
+                $style .= "; margin-left: $resectionder %;";
                 break;
 
             case "center":
@@ -533,12 +536,14 @@ class AttributeTranslator
      */
     protected static function _set_input_width(\DOMElement $node, $value)
     {
-        if (empty($value)) { return null; }
+        if (empty($value)) {
+            return null;
+        }
 
-        if ($node->hasAttribute("type") && in_array(strtolower($node->getAttribute("type")), ["text","password"])) {
-            return sprintf("width: %Fem", (((int)$value * .65)+2));
+        if ($node->hasAttribute("type") && in_array(strtolower($node->getAttribute("type")), ["text", "password"])) {
+            return sprintf("width: %Fem", (((int) $value * .65) + 2));
         } else {
-            return sprintf("width: %upx;", (int)$value);
+            return sprintf("width: %upx;", (int) $value);
         }
     }
 
@@ -638,7 +643,7 @@ class AttributeTranslator
         $style = $node->getAttribute(self::$_style_attr);
 
         if ($value[0] === "-" || $value[0] === "+") {
-            $value = self::$_last_basefont_size + (int)$value;
+            $value = self::$_last_basefont_size + (int) $value;
         }
 
         if (isset(self::$_font_size_lookup[$value])) {

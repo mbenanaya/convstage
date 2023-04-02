@@ -1,72 +1,28 @@
 <?php
 
+require_once '../database/Database.php';
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 class Etudiant
 {
-    private $email;
-    private $datenaiss;
-    private $nom;
-    private $prenom;
-    private $cne;
-    private $cin;
-    private $diplome;
-    private $datedebut;
-    private $datefin;
+    public $db;
+    public $conn;
 
-    public function __construct($email, $datenaiss, $nom, $prenom, $cne, $cin, $diplome, $datedebut, $datefin)
+    public function __construct()
     {
-        $this->email = $email;
-        $this->datenaiss = $datenaiss;
-        $this->nom = $nom;
-        $this->prenom = $prenom;
-        $this->cne = $cne;
-        $this->cin = $cin;
-        $this->diplome = $diplome;
-        $this->datedebut = $datedebut;
-        $this->datefin = $datefin;
+        $this->db = new Database;
+        $this->conn = $this->db->getConnection();
     }
 
-    // Getters
-    public function getEmail()
+    public function Login($cne, $dateNaiss)
     {
-        return $this->email;
+        $stmt = $this->conn->prepare("SELECT cne, nom, prenom, datenaissance, diplome FROM etudiant WHERE cne = :cne AND datenaissance = :datenaissance");
+        $stmt->bindParam(':cne', $cne);
+        $stmt->bindParam(':datenaissance', $dateNaiss);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row;
     }
 
-    public function getdatenaiss()
-    {
-        return $this->datenaiss;
-    }
-
-    public function getNom()
-    {
-        return $this->nom;
-    }
-
-    public function getPrenom()
-    {
-        return $this->prenom;
-    }
-
-    public function getCne()
-    {
-        return $this->cne;
-    }
-
-    public function getCin()
-    {
-        return $this->cin;
-    }
-    public function getdiplome()
-    {
-        return $this->diplome;
-    }
-
-    public function getDatedebut()
-    {
-        return $this->datedebut;
-    }
-
-    public function getDatefin()
-    {
-        return $this->datefin;
-    }
 }

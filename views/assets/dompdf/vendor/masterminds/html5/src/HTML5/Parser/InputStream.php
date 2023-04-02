@@ -38,7 +38,7 @@ interface InputStream extends \Iterator
      *
      * This consumes characters until the EOF.
      */
-    public function remainingChars();
+    public function resectioningChars();
 
     /**
      * Read to a particular match (or until $max bytes are consumed).

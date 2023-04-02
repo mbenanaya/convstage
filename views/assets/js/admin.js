@@ -1,16 +1,21 @@
 function getAllEntrs() {
     $(document).on("click", ".showAe", function (e) {
         e.preventDefault();
-        $(".showAe").addClass("active");
-        $(".showAc").removeClass("active");
+        $(".showAe").addClass("active_link");
+        $(".showAc").removeClass("active_link");
+        $(".showSt").removeClass("active_link");
         $.ajax({
             url: "./controllers/Ajax.php",
             type: "POST",
             data: { action: "show" },
             dataType: "html",
+            beforeSend: function () {
+                showLoadingSpinner();
+            },
             success: function (data) {
-                $("#Select").html("");
-                $("#main__content").html(data);
+                $("#fils").html("");
+                $("#fils").css("display", "none");
+                $("#section__content").html(data);
             },
             error: function (xhr, textStatus, errorThrown) {
                 console.error(textStatus, errorThrown);
@@ -20,6 +25,9 @@ function getAllEntrs() {
                     text: textStatus,
                 });
             },
+            complete: function () {
+                hideLoadingSpinner();
+            },
         });
     });
 }
@@ -27,86 +35,81 @@ function getAllEntrs() {
 function showDiplomesNames() {
     $(document).on("click", ".showAc", function (e) {
         e.preventDefault();
-        $(".showAc").addClass("active");
-        $(".showAe").removeClass("active");
+        $(".showAc").addClass("active_link");
+        $(".showAe").removeClass("active_link");
+        $(".showSt").removeClass("active_link");
         $.ajax({
             url: "./controllers/ConvController.php",
             type: "POST",
             data: { action: "showConvs" },
             dataType: "json",
+            beforeSend: function () {
+                showLoadingSpinner();
+            },
             success: function (data) {
-                var licenseData = data.Licence;
-                var masterData = data.Master;
-                var engineerData = data.Ingenieur;
+                if ("error" in data) {
+                    $("#section__content").html("");
+                    $("#fils").html(
+                        '<div class="alert alert-danger px-5 py-3 mx-1 mt-5" role="alert"><h2 class="fw-normal fs-3 col-12 text-center m-0 p-0">' +
+                            data.error +
+                            "</h2></div>"
+                    );
+                } else {
+                    var licence = data.Licence;
+                    var master = data.Master;
+                    var ingenieur = data.Ingenieur;
 
-                var Select = "";
-                if (Object.keys(data).length > 0) {
-                    Select +=
-                        '<select class="form-select w-25 mt-4 mb-5" id="filterbyf" name="filterbyf">';
+                    var Select =
+                        '<select class="form-select w-25 mt-3 mb-4" id="filterbyf" name="filterbyf">';
                     Select += '<option value="Tous" selected>Tous</option>';
                     Select += '<optgroup label="Licence">';
-                    for (var i = 0; i < licenseData.length; i++) {
-                        var item = licenseData[i];
-                        for (var key in item) {
-                            if (item.hasOwnProperty(key)) {
-                                Select +=
-                                    '<option value="' +
-                                    item[key] +
-                                    '">' +
-                                    item[key] +
-                                    "</option>";
-                            }
-                        }
+                    for (var diplome in licence) {
+                        Select +=
+                            '<option value="' +
+                            licence[diplome] +
+                            '">' +
+                            licence[diplome] +
+                            "</option>";
                     }
 
                     Select += "</optgroup>";
                     Select += '<optgroup label="Master">';
-                    for (var i = 0; i < masterData.length; i++) {
-                        var item = masterData[i];
-                        for (var key in item) {
-                            if (item.hasOwnProperty(key)) {
-                                Select +=
-                                    '<option value="' +
-                                    item[key] +
-                                    '">' +
-                                    item[key] +
-                                    "</option>";
-                            }
-                        }
+                    for (var diplome in master) {
+                        Select +=
+                            '<option value="' +
+                            master[diplome] +
+                            '">' +
+                            master[diplome] +
+                            "</option>";
                     }
 
                     Select += "</optgroup>";
                     Select += '<optgroup label="Ingenieur">';
-                    for (var i = 0; i < engineerData.length; i++) {
-                        var item = engineerData[i];
-                        for (var key in item) {
-                            if (item.hasOwnProperty(key)) {
-                                Select +=
-                                    '<option value="' +
-                                    item[key] +
-                                    '">' +
-                                    item[key] +
-                                    "</option>";
-                            }
-                        }
+                    for (var diplome in ingenieur) {
+                        Select +=
+                            '<option value="' +
+                            ingenieur[diplome] +
+                            '">' +
+                            ingenieur[diplome] +
+                            "</option>";
                     }
 
                     Select += "</optgroup>";
                     Select += "</select>";
-                    $("#main__content").html("");
-                    $("#Select").html(Select);
-                } else {
-                    $("#Select").html(
-                        "<p class='text-center color-info'>La base est vide</p>"
-                    );
+                    $("#section__content").html("");
+                    $("#fils").html(Select);
                 }
             },
             error: function (xhr, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
                 Swal.fire({
                     icon: "error",
                     title: "Erreur",
                     text: "Une erreur est survenue",
                 });
+            },
+            complete: function () {
+                hideLoadingSpinner();
             },
         });
     });
@@ -150,22 +153,182 @@ function showAllConvs() {
                         "</td> </tr>";
                 });
                 ConvsTable += "</tbody></table>";
-                $("#main__content").html(ConvsTable);
+                $("#section__content").html(ConvsTable);
             },
             error: function (xhr, status, error) {
-                console.log(xhr.responseText, error);
-                // Swal.fire({
-                //     icon: "error",
-                //     title: "Erreur",
-                //     text: "Une erreur est survenue",
-                // });
+                Swal.fire({
+                    icon: "error",
+                    title: "Erreur",
+                    text: "Une erreur est survenue",
+                });
+            },
+        });
+    });
+}
+
+function showStatics() {
+    $(document).on("click", ".showSt", function (e) {
+        e.preventDefault();
+        $(".showSt").addClass("active_link");
+        $(".showAc").removeClass("active_link");
+        $(".showAe").removeClass("active_link");
+        $.ajax({
+            url: "./controllers/ConvController.php",
+            type: "POST",
+            data: { action: "showSts" },
+            dataType: "json",
+            beforeSend: function () {
+                showLoadingSpinner();
+            },
+            success: function (data) {
+                var countLicence = data.countLicence[0].countLicence;
+                var countMaster = data.countMaster[0].countMaster;
+                var countIngenieur = data.countIngenieur[0].countIngenieur;
+
+                $("#fils").html("");
+                $("#fils").css("display", "none");
+                var chart =
+                    "<canvas id='myChart' style='background-color: #f5f5f5;max-width: 80%;max-heigth: 60%'></canvas>";
+                $("#section__content").html(chart);
+
+                var ctx = document.getElementById("myChart").getContext("2d");
+                var myChart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: ["Licence", "Master", "Ingénieur"],
+                        datasets: [
+                            {
+                                label: "Conventions",
+                                data: [
+                                    countLicence,
+                                    countMaster,
+                                    countIngenieur,
+                                ],
+                                backgroundColor: [
+                                    "rgba(255, 193, 7, 0.2)",
+                                    "rgba(33, 150, 243, 0.2)",
+                                    "rgba(76, 175, 80, 0.2)",
+                                ],
+                                borderColor: [
+                                    "rgba(255, 193, 7, 1)",
+                                    "rgba(33, 150, 243, 1)",
+                                    "rgba(76, 175, 80, 1)",
+                                ],
+                                borderWidth: 1,
+                                options: { responsive: true },
+                            },
+                        ],
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                            },
+                        },
+                    },
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                Swal.fire({
+                    icon: "error",
+                    title: "Erreur",
+                    text: "Une erreur est survenue",
+                });
+            },
+            complete: function () {
+                hideLoadingSpinner();
+            },
+        });
+    });
+}
+
+function showConvSts() {
+    $(document).on("click", ".showSt", function (e) {
+        e.preventDefault();
+        $(".showSt").addClass("active_link");
+        $(".showAc").removeClass("active_link");
+        $(".showAe").removeClass("active_link");
+        $.ajax({
+            url: "./controllers/ConvController.php",
+            type: "POST",
+            data: { action: "showSts" },
+            dataType: "json",
+            beforeSend: function () {
+                showLoadingSpinner();
+            },
+            success: function (data) {
+                var countLicence = data.countLicence[0].countLicence;
+                var countMaster = data.countMaster[0].countMaster;
+                var countIngenieur = data.countIngenieur[0].countIngenieur;
+
+                $("#fils").html("");
+                $("#fils").css("display", "none");
+                var chart =
+                    "<canvas id='myChart' style='background-color: #f5f5f5;max-width: 80%;max-heigth: 60%'></canvas>";
+                $("#section__content").html(chart);
+
+                var ctx = document.getElementById("myChart").getContext("2d");
+                var myChart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: ["Licence", "Master", "Ingénieur"],
+                        datasets: [
+                            {
+                                label: "Conventions",
+                                data: [
+                                    countLicence,
+                                    countMaster,
+                                    countIngenieur,
+                                ],
+                                backgroundColor: [
+                                    "rgba(255, 193, 7, 0.2)",
+                                    "rgba(33, 150, 243, 0.2)",
+                                    "rgba(76, 175, 80, 0.2)",
+                                ],
+                                borderColor: [
+                                    "rgba(255, 193, 7, 1)",
+                                    "rgba(33, 150, 243, 1)",
+                                    "rgba(76, 175, 80, 1)",
+                                ],
+                                borderWidth: 1,
+                                options: { responsive: true },
+                            },
+                        ],
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                            },
+                        },
+                    },
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                Swal.fire({
+                    icon: "error",
+                    title: "Erreur",
+                    text: "Une erreur est survenue",
+                });
+            },
+            complete: function () {
+                hideLoadingSpinner();
             },
         });
     });
 }
 
 $(function () {
+    $(".close").click(function () {
+        $(".alert").alert("close");
+        $(".top").css("display", "none");
+    });
+
     getAllEntrs();
     showDiplomesNames();
     showAllConvs();
+    showStatics();
+    showConvSts();
 });

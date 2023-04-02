@@ -3,45 +3,60 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-require_once('../database/Database.php');
-class EtudiantController
+require_once '../database/Database.php';
+require_once '../models/Etudiant.php';
+require_once '../models/Admin.php';
+class LoginController
 {
-    private $email;
-    private $password;
-    private $is_admin;
+    private $etudiant;
+    private $admin;
     public $db;
     public $conn;
 
-    public function __construct($email, $password)
+    public function __construct()
     {
-        global $is_admin;
-        $this->email = $email;
-        $this->password = $password;
+        $this->etudiant = new Etudiant;
         $this->db = new Database;
         $this->conn = $this->db->getConnection();
-        $this->is_admin = $is_admin;
+        $this->admin = new Admin;
     }
 
-
-    public function authenticate()
+    public function StudentLogin($cne, $dateNaiss)
     {
         header('Content-Type: application/json');
 
-        // Validate user input
-        $email = filter_var($this->email, FILTER_SANITIZE_EMAIL);
-        $password = filter_var($this->password, FILTER_SANITIZE_STRING);
+        $cne = filter_var($cne, FILTER_SANITIZE_STRING);
+        $dateNaiss = filter_var($dateNaiss, FILTER_SANITIZE_STRING);
+        $row = $this->etudiant->Login($cne, $dateNaiss);
 
-        $stmt = $this->conn->prepare("SELECT username FROM admin WHERE email = ? AND password = ?");
-        $stmt->bindParam(1, $email);
-        $stmt->bindParam(2, $password);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $sql = $this->conn->prepare("SELECT nom, prenom, cne, diplome FROM etudiant WHERE cne = ? AND DATE_FORMAT(datenaiss, '%d/%m/%y') = ?");
-        $sql->bindParam(1, $email);
-        $sql->bindParam(2, $password);
-        $sql->execute();
-        $result = $sql->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            session_start();
+            $_SESSION['prenom'] = $row['prenom'];
+            $_SESSION['nom'] = $row['nom'];
+            $_SESSION['cne'] = $row['cne'];
+            $_SESSION['diplome'] = $row['diplome'];
+            $url = 'home';
+            $response = array(
+                'success' => true,
+                'url' => $url,
+            );
+        } else {
+            $response = array(
+                'success' => false,
+                'message' => 'Le cne ou le mot de passe est invalide'
+            );
+        }
+        echo json_encode($response);
+        $this->conn = null;
+    }
 
+    public function AdminLogin($email, $password)
+    {
+        header('Content-Type: application/json');
+
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+        $password = filter_var($password, FILTER_SANITIZE_STRING);
+        $row = $this->admin->adminLogin($email, $password);
 
         if ($row) {
             session_start();
@@ -51,21 +66,10 @@ class EtudiantController
                 'success' => true,
                 'url' => $url,
             );
-        } else if ($result) {
-            session_start();
-            $_SESSION['prenom'] = $result['prenom'];
-            $_SESSION['nom'] = $result['nom'];
-            $_SESSION['cne'] = $result['cne'];
-            $_SESSION['diplome'] = $result['diplome'];
-            $url = 'home';
-            $response = array(
-                'success' => true,
-                'url' => $url,
-            );
         } else {
             $response = array(
                 'success' => false,
-                'message' => 'L\'adresse email ou le mot de passe est invalide'
+                'message' => "L'email ou le mot de passe est invalide"
             );
         }
         echo json_encode($response);
@@ -73,15 +77,16 @@ class EtudiantController
     }
 }
 
+$login = new LoginController();
 
-function handleLogin()
-{
-    if (isset($_POST['connecter'])) {
-        $email = stripcslashes(htmlspecialchars(trim($_POST['email'])));
-        $password = trim($_POST['password']);
-        $etContr = new EtudiantController($email, $password);
-        $etContr->authenticate();
-    }
+if (isset($_POST['student_login'])) {
+    $cne = stripcslashes(htmlspecialchars(trim($_POST['cne'])));
+    $dateNaiss = stripcslashes(htmlspecialchars(trim($_POST['datenaiss'])));
+    $login->StudentLogin($cne, $dateNaiss);
 }
 
-handleLogin();
+if (isset($_POST['connecter'])) {
+    $email = stripcslashes(htmlspecialchars(trim($_POST['email'])));
+    $password = stripcslashes(htmlspecialchars(trim($_POST['password'])));
+    $login->AdminLogin($email, $password);
+}

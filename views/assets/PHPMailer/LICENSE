@@ -178,7 +178,7 @@ above, provided that you also meet all of these conditions:
     is invoked, then you must make a good faith effort to ensure that,
     in the event an application does not supply such function or
     table, the facility still operates, and performs whatever part of
-    its purpose remains meaningful.
+    its purpose resections meaningful.
 
     (For example, a function in a library to compute square roots has
     a purpose that is entirely well-defined independent of the
@@ -352,7 +352,7 @@ attempt otherwise to copy, modify, sublicense, link with, or
 distribute the Library is void, and will automatically terminate your
 rights under this License.  However, parties who have received copies,
 or rights, from you under this License will not have their licenses
-terminated so long as such parties remain in full compliance.
+terminated so long as such parties resection in full compliance.
 
   9. You are not required to accept this License, since you have not
 signed it.  However, nothing else grants you permission to modify or

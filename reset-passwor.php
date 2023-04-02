@@ -13,7 +13,7 @@
 
     <?php include __DIR__ . '/views/includes/nav_mpo.php' ?>
 
-    <main>
+    <section>
         <div class="container pt-3 pb-5">
             <div class="container-fluid col-11 col-sm-7 col-md-8 col-lg-6 col-xl-3 col-xxl-3 bg-white p-3 rounded-4">
                 <form id="reset_pass">
@@ -32,7 +32,7 @@
                 </form>
             </div>
         </div>
-    </main>
+    </section>
 
     <?php //require_once __DIR__ . '/views/includes/footer.php' ?>
     <?php //require_once __DIR__ . '/views/includes/js_scripts.php' ?>

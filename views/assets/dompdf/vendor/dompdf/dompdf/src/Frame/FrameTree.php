@@ -47,7 +47,7 @@ class FrameTree implements IteratorAggregate
     ];
 
     /**
-     * The main DomDocument
+     * The section DomDocument
      *
      * @see http://ca2.php.net/manual/en/ref.dom.php
      * @var DOMDocument
@@ -78,7 +78,7 @@ class FrameTree implements IteratorAggregate
     /**
      * Class constructor
      *
-     * @param DOMDocument $dom the main DomDocument object representing the current html document
+     * @param DOMDocument $dom the section DomDocument object representing the current html document
      */
     public function __construct(DomDocument $dom)
     {
@@ -219,7 +219,7 @@ class FrameTree implements IteratorAggregate
         if (isset($previousChild, $nextChild)) {
             if ($previousChild->nodeName === "#text" && $nextChild->nodeName === "#text") {
                 $previousChild->nodeValue .= $nextChild->nodeValue;
-                $this->_remove_node($node, $children, $index+1);
+                $this->_remove_node($node, $children, $index + 1);
             }
         }
         array_splice($children, $index, 1);

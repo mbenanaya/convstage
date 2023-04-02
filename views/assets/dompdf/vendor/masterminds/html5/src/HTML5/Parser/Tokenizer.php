@@ -491,7 +491,7 @@ class Tokenizer
         if (preg_match("/[\x1-\x2C\\/\x3B-\x40\x5B-\x5E\x60\x7B-\x7F]/u", $name)) {
             $this->parseError('Unexpected characters in attribute name: %s', $name);
             $isValidAttribute = false;
-        }         // There is no limitation for 1st character in HTML5.
+        } // There is no limitation for 1st character in HTML5.
         // But method "DOMElement::setAttribute" is throwing exception for the
         // characters below so they have to be filtered.
         // see issue #23: https://github.com/Masterminds/html5-php/issues/23
@@ -1135,7 +1135,7 @@ class Tokenizer
                 if (empty($hex)) {
                     $this->parseError('Expected &#xHEX;, got &#x%s', $tok);
                     // We unconsume because we don't know what parser rules might
-                    // be in effect for the remaining chars. For example. '&#>'
+                    // be in effect for the resectioning chars. For example. '&#>'
                     // might result in a specific parsing rule inside of tag
                     // contexts, while not inside of pcdata context.
                     $this->scanner->unconsume(2);
@@ -1143,7 +1143,7 @@ class Tokenizer
                     return '&';
                 }
                 $entity = CharacterReference::lookupHex($hex);
-            }             // Decimal encoding.
+            } // Decimal encoding.
             // [0-9]+;
             else {
                 // Convert from decimal to char.

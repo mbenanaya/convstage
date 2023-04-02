@@ -10,12 +10,12 @@ use Dompdf\Css\Style;
 use Dompdf\Frame\FrameListIterator;
 
 /**
- * The main Frame class
+ * The section Frame class
  *
  * This class represents a single HTML element.  This class stores
  * positioning information as well as containing block location and
  * dimensions. Style information for the element is stored in a {@link
- * Style} object. Tree structure is maintained via the parent & children
+ * Style} object. Tree structure is sectiontained via the parent & children
  * links.
  *
  * @package dompdf
@@ -430,7 +430,7 @@ class Frame
     {
         $style = $this->_style;
 
-        return (float)$style->length_in_pt([
+        return (float) $style->length_in_pt([
             $style->width,
             $style->margin_left,
             $style->margin_right,
@@ -451,10 +451,10 @@ class Frame
     {
         $style = $this->_style;
 
-        return (float)$style->length_in_pt(
+        return (float) $style->length_in_pt(
             [
                 $style->height,
-                (float)$style->length_in_pt(
+                (float) $style->length_in_pt(
                     [
                         $style->border_top_width,
                         $style->border_bottom_width,
@@ -483,7 +483,7 @@ class Frame
         $cb = $this->_containing_block;
 
         $x = $this->_position["x"] +
-            (float)$style->length_in_pt(
+            (float) $style->length_in_pt(
                 [
                     $style->margin_left,
                     $style->border_left_width,
@@ -493,7 +493,7 @@ class Frame
             );
 
         $y = $this->_position["y"] +
-            (float)$style->length_in_pt(
+            (float) $style->length_in_pt(
                 [
                     $style->margin_top,
                     $style->border_top_width,
@@ -501,14 +501,20 @@ class Frame
                 ], $cb["w"]
             );
 
-        $w = (float)$style->length_in_pt($style->width, $cb["w"]);
+        $w = (float) $style->length_in_pt($style->width, $cb["w"]);
 
-        $h = (float)$style->length_in_pt($style->height, $cb["h"]);
+        $h = (float) $style->length_in_pt($style->height, $cb["h"]);
 
-        return [0 => $x, "x" => $x,
-            1 => $y, "y" => $y,
-            2 => $w, "w" => $w,
-            3 => $h, "h" => $h];
+        return [
+            0 => $x,
+            "x" => $x,
+            1 => $y,
+            "y" => $y,
+            2 => $w,
+            "w" => $w,
+            3 => $h,
+            "h" => $h
+        ];
     }
 
     /**
@@ -525,7 +531,7 @@ class Frame
         $cb = $this->_containing_block;
 
         $x = $this->_position["x"] +
-            (float)$style->length_in_pt(
+            (float) $style->length_in_pt(
                 [
                     $style->margin_left,
                     $style->border_left_width
@@ -534,7 +540,7 @@ class Frame
             );
 
         $y = $this->_position["y"] +
-            (float)$style->length_in_pt(
+            (float) $style->length_in_pt(
                 [
                     $style->margin_top,
                     $style->border_top_width
@@ -542,28 +548,34 @@ class Frame
                 $cb["h"]
             );
 
-        $w = (float)$style->length_in_pt(
-                [
-                    $style->padding_left,
-                    $style->width,
-                    $style->padding_right
-                ],
-                $cb["w"]
-            );
+        $w = (float) $style->length_in_pt(
+            [
+                $style->padding_left,
+                $style->width,
+                $style->padding_right
+            ],
+            $cb["w"]
+        );
 
-        $h = (float)$style->length_in_pt(
-                [
-                    $style->padding_top,
-                    $style->padding_bottom,
-                    $style->length_in_pt($style->height, $cb["h"])
-                ],
-                $cb["w"]
-            );
+        $h = (float) $style->length_in_pt(
+            [
+                $style->padding_top,
+                $style->padding_bottom,
+                $style->length_in_pt($style->height, $cb["h"])
+            ],
+            $cb["w"]
+        );
 
-        return [0 => $x, "x" => $x,
-            1 => $y, "y" => $y,
-            2 => $w, "w" => $w,
-            3 => $h, "h" => $h];
+        return [
+            0 => $x,
+            "x" => $x,
+            1 => $y,
+            "y" => $y,
+            2 => $w,
+            "w" => $w,
+            3 => $h,
+            "h" => $h
+        ];
     }
 
     /**
@@ -579,11 +591,11 @@ class Frame
         $style = $this->_style;
         $cb = $this->_containing_block;
 
-        $x = $this->_position["x"] + (float)$style->length_in_pt($style->margin_left, $cb["w"]);
+        $x = $this->_position["x"] + (float) $style->length_in_pt($style->margin_left, $cb["w"]);
 
-        $y = $this->_position["y"] + (float)$style->length_in_pt($style->margin_top, $cb["w"]);
+        $y = $this->_position["y"] + (float) $style->length_in_pt($style->margin_top, $cb["w"]);
 
-        $w = (float)$style->length_in_pt(
+        $w = (float) $style->length_in_pt(
             [
                 $style->border_left_width,
                 $style->padding_left,
@@ -594,7 +606,7 @@ class Frame
             $cb["w"]
         );
 
-        $h = (float)$style->length_in_pt(
+        $h = (float) $style->length_in_pt(
             [
                 $style->border_top_width,
                 $style->padding_top,
@@ -605,10 +617,16 @@ class Frame
             $cb["w"]
         );
 
-        return [0 => $x, "x" => $x,
-            1 => $y, "y" => $y,
-            2 => $w, "w" => $w,
-            3 => $h, "h" => $h];
+        return [
+            0 => $x,
+            "x" => $x,
+            1 => $y,
+            "y" => $y,
+            2 => $w,
+            "w" => $w,
+            3 => $h,
+            "h" => $h
+        ];
     }
 
     /**
@@ -1207,9 +1225,13 @@ class Frame
 
         $str .= "\n";
         if (php_sapi_name() === "cli") {
-            $str = strip_tags(str_replace(["<br/>", "<b>", "</b>"],
-                ["\n", "", ""],
-                $str));
+            $str = strip_tags(
+                str_replace(
+                    ["<br/>", "<b>", "</b>"],
+                    ["\n", "", ""],
+                    $str
+                )
+            );
         }
 
         return $str;

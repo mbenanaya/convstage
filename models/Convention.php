@@ -98,7 +98,27 @@ class Convention
         return $rows;
     }
 
-}
+    function countLicenceDips()
+    {
+        $stmt = $this->conn->prepare("SELECT COUNT(idConv) AS countLicence FROM convention WHERE diplome IN ('ALTBICG', 'ALTMIPC', 'ALTMAIP')");
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }
+    function countMasterDips()
+    {
+        $stmt = $this->conn->prepare("SELECT COUNT(idConv) AS countMaster FROM convention WHERE diplome IN ('AMTMAAV','AMTSDAD', 'AMTEXVG', 'AMTMCSM', 'AMTGEEL', 'AMTBIOV', 'AMTMIAI', 'AMTGEAA', 'AMTRDPS', 'AMTMDIM', 'AMTMMEA', 'AMTPSNB')");
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }
 
-$conv = new Convention;
-// print_r($conv->getDipsLicence());
+    function countIngenieurDips()
+    {
+        $stmt = $this->conn->prepare("SELECT COUNT(idConv) AS countIngenieur FROM convention WHERE diplome IN ('AMTSDAD', 'ADIISA ', 'ADIIFA ', 'ADIIRSI', 'ADERME ', 'ADIGMP ', 'ADIIGC ', 'ADIIRIS')");
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }
+
+}

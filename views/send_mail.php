@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -7,7 +6,6 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/assets/PHPMailer/src/PHPMailer.php';
 require_once __DIR__ . '/assets/PHPMailer/src/SMTP.php';
 require_once __DIR__ . '/assets/PHPMailer/src/Exception.php';
-
 require_once __DIR__ . '../../database/Database.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -25,12 +23,9 @@ if (isset($_POST['email'])) {
     $admin = $stmt->fetch();
 
     if ($admin) {
+        $username = $admin['username'];
+        $reset_link = "http://localhost/convstage/reset-password/username=" . urlencode($username);
 
-        // Create the reset link
-        $reset_link = "http://localhost/convstage/views/reset-password/?email=" . urlencode($email);
-        // $reset_link = "http://localhost/convstage/reset-password";
-
-        // Send the email using PHP mailer
         $mail = new PHPMailer();
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';

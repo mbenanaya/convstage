@@ -349,7 +349,8 @@ class Stylesheet
             // See http://the-stickman.com/web-development/php/getting-http-response-headers-when-using-file_get_contents/
             if (isset($http_response_header) && !$this->_dompdf->getQuirksmode()) {
                 foreach ($http_response_header as $_header) {
-                    if (preg_match("@Content-Type:\s*([\w/]+)@i", $_header, $matches) &&
+                    if (
+                        preg_match("@Content-Type:\s*([\w/]+)@i", $_header, $matches) &&
                         ($matches[1] !== "text/css")
                     ) {
                         $good_mime_type = false;
@@ -883,7 +884,7 @@ class Stylesheet
      * applies all current styles to a particular document tree
      *
      * apply_styles() applies all currently loaded styles to the provided
-     * {@link FrameTree}.  Aside from parsing CSS, this is the main purpose
+     * {@link FrameTree}.  Aside from parsing CSS, this is the section purpose
      * of this class.
      *
      * @param FrameTree $tree
@@ -1087,45 +1088,45 @@ class Stylesheet
                             //TODO: When the media query logic is fully developed we should not apply the Style when any of the media queries fail or are bad, per https://www.w3.org/TR/css3-mediaqueries/#error-handling
                             if (in_array($media_query_feature, self::$VALID_MEDIA_TYPES)) {
                                 if ((strlen($media_query_feature) === 0 && !in_array($media_query, $acceptedmedia)) || (in_array($media_query, $acceptedmedia) && $media_query_value == "not")) {
-                                    continue (3);
+                                    continue(3);
                                 }
                             } else {
                                 switch ($media_query_feature) {
                                     case "height":
-                                        if ($paper_height !== (float)$style->length_in_pt($media_query_value)) {
-                                            continue (3);
+                                        if ($paper_height !== (float) $style->length_in_pt($media_query_value)) {
+                                            continue(3);
                                         }
                                         break;
                                     case "min-height":
-                                        if ($paper_height < (float)$style->length_in_pt($media_query_value)) {
-                                            continue (3);
+                                        if ($paper_height < (float) $style->length_in_pt($media_query_value)) {
+                                            continue(3);
                                         }
                                         break;
                                     case "max-height":
-                                        if ($paper_height > (float)$style->length_in_pt($media_query_value)) {
-                                            continue (3);
+                                        if ($paper_height > (float) $style->length_in_pt($media_query_value)) {
+                                            continue(3);
                                         }
                                         break;
                                     case "width":
-                                        if ($paper_width !== (float)$style->length_in_pt($media_query_value)) {
-                                            continue (3);
+                                        if ($paper_width !== (float) $style->length_in_pt($media_query_value)) {
+                                            continue(3);
                                         }
                                         break;
                                     case "min-width":
                                         //if (min($paper_width, $media_query_width) === $paper_width) {
-                                        if ($paper_width < (float)$style->length_in_pt($media_query_value)) {
-                                            continue (3);
+                                        if ($paper_width < (float) $style->length_in_pt($media_query_value)) {
+                                            continue(3);
                                         }
                                         break;
                                     case "max-width":
                                         //if (max($paper_width, $media_query_width) === $paper_width) {
-                                        if ($paper_width > (float)$style->length_in_pt($media_query_value)) {
-                                            continue (3);
+                                        if ($paper_width > (float) $style->length_in_pt($media_query_value)) {
+                                            continue(3);
                                         }
                                         break;
                                     case "orientation":
                                         if ($paper_orientation !== $media_query_value) {
-                                            continue (3);
+                                            continue(3);
                                         }
                                         break;
                                     default:
@@ -1166,8 +1167,8 @@ class Stylesheet
                 if ($style->size !== "auto") {
                     list($paper_width, $paper_height) = $style->size;
                 }
-                $paper_width = $paper_width - (float)$style->length_in_pt($style->margin_left) - (float)$style->length_in_pt($style->margin_right);
-                $paper_height = $paper_height - (float)$style->length_in_pt($style->margin_top) - (float)$style->length_in_pt($style->margin_bottom);
+                $paper_width = $paper_width - (float) $style->length_in_pt($style->margin_left) - (float) $style->length_in_pt($style->margin_right);
+                $paper_height = $paper_height - (float) $style->length_in_pt($style->margin_top) - (float) $style->length_in_pt($style->margin_bottom);
                 $paper_orientation = ($paper_width > $paper_height ? "landscape" : "portrait");
             }
         }
@@ -1366,10 +1367,12 @@ class Stylesheet
             $val = preg_replace("/url\(\s*['\"]?([^'\")]+)['\"]?\s*\)/", "\\1", trim($val));
 
             // Resolve the url now in the context of the current stylesheet
-            $path = Helpers::build_url($this->_protocol,
+            $path = Helpers::build_url(
+                $this->_protocol,
                 $this->_base_host,
                 $this->_base_path,
-                $val);
+                $val
+            );
             if ($path === null) {
                 $path = "none";
             }
@@ -1500,21 +1503,22 @@ class Stylesheet
             // If the $prop contains an url, the regex may be wrong
             // @todo: fix the regex so that it works every time
             /*if (strpos($prop, "url(") === false) {
-              if (preg_match("/([a-z-]+)\s*:\s*[^:]+$/i", $prop, $m))
-                $prop = $m[0];
+            if (preg_match("/([a-z-]+)\s*:\s*[^:]+$/i", $prop, $m))
+            $prop = $m[0];
             }*/
 
             //A css property can have " ! important" appended (whitespace optional)
             //strip this off to decode core of the property correctly.
 
             /* Instead of short code, prefer the typical case with fast code
-          $important = preg_match("/(.*?)!\s*important/",$prop,$match);
+            $important = preg_match("/(.*?)!\s*important/",$prop,$match);
             if ( $important ) {
-              $prop = $match[1];
+            $prop = $match[1];
             }
             $prop = trim($prop);
             */
-            if ($DEBUGCSS) print '(';
+            if ($DEBUGCSS)
+                print '(';
 
             $important = false;
             $prop = trim($prop);
@@ -1529,24 +1533,28 @@ class Stylesheet
             }
 
             if ($prop === "") {
-                if ($DEBUGCSS) print 'empty)';
+                if ($DEBUGCSS)
+                    print 'empty)';
                 continue;
             }
 
             $i = mb_strpos($prop, ":");
             if ($i === false) {
-                if ($DEBUGCSS) print 'novalue' . $prop . ')';
+                if ($DEBUGCSS)
+                    print 'novalue' . $prop . ')';
                 continue;
             }
 
             $prop_name = rtrim(mb_strtolower(mb_substr($prop, 0, $i)));
             $value = ltrim(mb_substr($prop, $i + 1));
 
-            if ($DEBUGCSS) print $prop_name . ':=' . $value . ($important ? '!IMPORTANT' : '') . ')';
+            if ($DEBUGCSS)
+                print $prop_name . ':=' . $value . ($important ? '!IMPORTANT' : '') . ')';
 
             $style->set_prop($prop_name, $value, $important, false);
         }
-        if ($DEBUGCSS) print '_parse_properties]';
+        if ($DEBUGCSS)
+            print '_parse_properties]';
 
         return $style;
     }
@@ -1566,12 +1574,16 @@ class Stylesheet
         $DEBUGCSS = $this->_dompdf->getOptions()->getDebugCss();
 
         $sections = explode("}", $str);
-        if ($DEBUGCSS) print '[_parse_sections';
+        if ($DEBUGCSS)
+            print '[_parse_sections';
         foreach ($sections as $sect) {
             $i = mb_strpos($sect, "{");
-            if ($i === false) { continue; }
+            if ($i === false) {
+                continue;
+            }
 
-            if ($DEBUGCSS) print '[section';
+            if ($DEBUGCSS)
+                print '[section';
 
             $selector_str = preg_replace($patterns, $replacements, mb_substr($sect, 0, $i));
             $selectors = preg_split("/,(?![^\(]*\))/", $selector_str, 0, PREG_SPLIT_NO_EMPTY);
@@ -1582,10 +1594,12 @@ class Stylesheet
                 $selector = trim($selector);
 
                 if ($selector === "") {
-                    if ($DEBUGCSS) print '#empty#';
+                    if ($DEBUGCSS)
+                        print '#empty#';
                     continue;
                 }
-                if ($DEBUGCSS) print '#' . $selector . '#';
+                if ($DEBUGCSS)
+                    print '#' . $selector . '#';
                 //if ($DEBUGCSS) { if (strpos($selector,'p') !== false) print '!!!p!!!#'; }
 
                 //FIXME: tag the selector with a hash of the media query to separate it from non-conditional styles (?), xpath comments are probably not what we want to do here

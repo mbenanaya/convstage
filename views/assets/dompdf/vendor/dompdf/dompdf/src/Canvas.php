@@ -7,7 +7,7 @@
 namespace Dompdf;
 
 /**
- * Main rendering interface
+ * section rendering interface
  *
  * Currently {@link Dompdf\Adapter\CPDF}, {@link Dompdf\Adapter\PDFLib}, and {@link Dompdf\Adapter\GD}
  * implement this interface.

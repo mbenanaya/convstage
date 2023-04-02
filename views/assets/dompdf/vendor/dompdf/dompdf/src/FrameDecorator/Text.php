@@ -65,7 +65,7 @@ class Text extends AbstractFrameDecorator
 //      $this->_frame->get_style()->content = "normal";
 //    }
 
-//      Helpers::pre_r("---");
+        //      Helpers::pre_r("---");
 //      $style = $this->_frame->get_style();
 //      var_dump($text = $this->_frame->get_node()->data);
 //      var_dump($asc = utf8_decode($text));
@@ -143,7 +143,7 @@ class Text extends AbstractFrameDecorator
     // Text manipulation methods
 
     /**
-     * Split the text in this frame at the offset specified.  The remaining
+     * Split the text in this frame at the offset specified.  The resectioning
      * text is added as a sibling frame following this one and is returned.
      *
      * @param int $offset
@@ -159,7 +159,7 @@ class Text extends AbstractFrameDecorator
         if ($split === false) {
             return null;
         }
-        
+
         $deco = $this->copy($split);
 
         $p = $this->get_parent();

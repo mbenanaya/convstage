@@ -171,7 +171,8 @@ class Page extends AbstractFrameDecorator
         $page_breaks = ["always", "left", "right"];
         $style = $frame->get_style();
 
-        if (($frame->is_block_level() || $style->display === "table-row")
+        if (
+            ($frame->is_block_level() || $style->display === "table-row")
             && in_array($style->page_break_before, $page_breaks, true)
         ) {
             // Prevent cascading splits
@@ -187,8 +188,9 @@ class Page extends AbstractFrameDecorator
         // elements are treated as if wrapped in an anonymous block container
         // here. See https://www.w3.org/TR/CSS21/visuren.html#anonymous-block-level
         $prev = $frame->get_prev_sibling();
-        while ($prev && (($prev->is_text_node() && $prev->get_node()->nodeValue === "")
-            || $prev->get_node()->nodeName === "bullet")
+        while (
+            $prev && (($prev->is_text_node() && $prev->get_node()->nodeValue === "")
+                || $prev->get_node()->nodeName === "bullet")
         ) {
             $prev = $prev->get_prev_sibling();
         }
@@ -205,13 +207,15 @@ class Page extends AbstractFrameDecorator
             }
 
             $prev_last_child = $prev->get_last_child();
-            while ($prev_last_child && (($prev_last_child->is_text_node() && $prev_last_child->get_node()->nodeValue === "")
-                || $prev_last_child->get_node()->nodeName === "bullet")
+            while (
+                $prev_last_child && (($prev_last_child->is_text_node() && $prev_last_child->get_node()->nodeValue === "")
+                    || $prev_last_child->get_node()->nodeName === "bullet")
             ) {
                 $prev_last_child = $prev_last_child->get_prev_sibling();
             }
 
-            if ($prev_last_child
+            if (
+                $prev_last_child
                 && $prev_last_child->is_block_level()
                 && in_array($prev_last_child->get_style()->page_break_after, $page_breaks, true)
             ) {
@@ -332,14 +336,16 @@ class Page extends AbstractFrameDecorator
             // treated as if wrapped in an anonymous block container here. See
             // https://www.w3.org/TR/CSS21/visuren.html#anonymous-block-level
             $prev = $frame->get_prev_sibling();
-            while ($prev && (($prev->is_text_node() && $prev->get_node()->nodeValue === "")
-                || $prev->get_node()->nodeName === "bullet")
+            while (
+                $prev && (($prev->is_text_node() && $prev->get_node()->nodeValue === "")
+                    || $prev->get_node()->nodeName === "bullet")
             ) {
                 $prev = $prev->get_prev_sibling();
             }
 
             // Does the previous element allow a page break after?
-            if ($prev && ($prev->is_block_level() || $prev->get_style()->display === "-dompdf-image")
+            if (
+                $prev && ($prev->is_block_level() || $prev->get_style()->display === "-dompdf-image")
                 && $prev->get_style()->page_break_after === "avoid"
             ) {
                 Helpers::dompdf_debug("page-break", "after: avoid");
@@ -411,7 +417,7 @@ class Page extends AbstractFrameDecorator
                 }
 
                 // FIXME: Checking widows is tricky without having laid out the
-                // remaining line boxes.  Just ignore it for now...
+                // resectioning line boxes.  Just ignore it for now...
 
                 // Rule D
                 $p = $block_parent;
@@ -443,7 +449,7 @@ class Page extends AbstractFrameDecorator
 
                 return true;
 
-            // Table-rows
+                // Table-rows
             } else {
                 if ($display === "table-row") {
 
@@ -467,7 +473,8 @@ class Page extends AbstractFrameDecorator
                     if (!$prev) {
                         $prev_group = $frame->get_parent()->get_prev_sibling();
 
-                        if ($prev_group
+                        if (
+                            $prev_group
                             && in_array($prev_group->get_style()->display, Table::ROW_GROUPS, true)
                         ) {
                             $prev = $prev_group->get_last_child();
@@ -533,7 +540,8 @@ class Page extends AbstractFrameDecorator
      */
     function check_page_break(Frame $frame)
     {
-        if ($this->_page_full || $frame->_already_pushed
+        if (
+            $this->_page_full || $frame->_already_pushed
             // Never check for breaks on empty text nodes
             || ($frame->is_text_node() && $frame->get_node()->nodeValue === "")
         ) {
@@ -544,7 +552,9 @@ class Page extends AbstractFrameDecorator
         do {
             $display = $p->get_style()->display;
             if ($display == "table-row") {
-                if ($p->_already_pushed) { return false; }
+                if ($p->_already_pushed) {
+                    return false;
+                }
             }
         } while ($p = $p->get_parent());
 
@@ -559,7 +569,7 @@ class Page extends AbstractFrameDecorator
         $margin_height = $frame->get_margin_height();
 
         // Determine the frame's maximum y value
-        $max_y = (float)$frame->get_position("y") + $margin_height;
+        $max_y = (float) $frame->get_position("y") + $margin_height;
 
         // If a split is to occur here, then the bottom margins & paddings of all
         // parents of $frame must fit on the page as well:
