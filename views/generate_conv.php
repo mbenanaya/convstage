@@ -33,7 +33,7 @@ $html = '
 <html lang="fr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Convention de stage</title>
+    <title>Convention ' . $nom . ' ' . $prenom . '</title>
     <style type="text/css">
         * {font-family: \'Noto Sans Arabic UI\', sans-serif;box-sizing: border-box;}
     </style>

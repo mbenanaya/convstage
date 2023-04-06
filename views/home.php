@@ -31,7 +31,7 @@ if (!isset($_SESSION['prenom'])) {
         </div>
         <div class="d-flex justify-content-center pt-5 pb-5">
             <button type="button" class="btn downloadButton" data-bs-toggle="modal" data-bs-target="#downloadModal"><i
-                    class="fa fa-download"></i> Télécharger Convention</button>
+                    class="fa fa-download"></i> Créer Convention</button>
 
             <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="title" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -173,7 +173,13 @@ if (!isset($_SESSION['prenom'])) {
             </div>
 
         </div>
-        <div id="pdf_container"></div>
+        <div id="pdf_container" class="container d-flex justify-content-center align-items-center flex-column mb-5">
+            <iframe id="pdf_frame" src="https://github.com/mbenanaya/" style="width: 100%;height: 700px"/>
+            <div id="btns" class="py-2">
+                <a href="" id="download_link" class="btn btn-success submit_button mx-1">Télécharger</a>
+                <button class="btn btn-danger del_conv mx-1">Supprimer</button>
+            </div>
+        </div>
     </section>
 
     <?php require __DIR__ . '/includes/footer.php' ?>

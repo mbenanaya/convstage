@@ -222,18 +222,46 @@ $(document).ready(function () {
                             var blob = new Blob([data], {
                                 type: "application/pdf",
                             });
-                            var link = document.createElement("a");
-                            link.href = window.URL.createObjectURL(blob);
-                            link.download =
+                            $("#downloadModal").modal("hide");
+                            $("#pdf_container").show();
+                            var url = URL.createObjectURL(blob);
+                            var pdfFrame = $("#pdf_frame");
+                            pdfFrame.src = url;
+                            var downloadLink = $("#download_link");
+                            downloadLink.href = url;
+                            downloadLink.download =
                                 "Convention_" + nom + "_" + cne + ".pdf";
-                            link.click();
+                            deleteButton = $(".del_conv");
+                            deleteButton.on("click", function () {
+                                Swal.fire({
+                                    title: "Are you sure?",
+                                    text: "You won't be able to revert this!",
+                                    icon: "warning",
+                                    showCancelButton: true,
+                                    confirmButtonColor: "#3085d6",
+                                    cancelButtonColor: "#d33",
+                                    confirmButtonText: "Oui, Supprimer",
+                                    cancelButtonText: 'Non, Annuler'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        Swal.fire(
+                                            "Supprimeè",
+                                            "Convention supprimée avec successè.",
+                                            "success"
+                                        );
+                                        $("#pdf_cont").html('')
+                                    }
+                                });
+                                
+                            });
+                            
                             setTimeout(function () {
-                                window.URL.revokeObjectURL(link.href);
-                                $(link).remove();
+                                URL.revokeObjectURL(url);
                             }, 100);
                         },
                         error: function (xhr, textStatus, errorThrown) {
                             submitButton.attr("disabled", false).html(caption);
+                            hideLoadingSpinner();
                             Swal.fire({
                                 icon: "error",
                                 title: "Erreur",
@@ -250,6 +278,9 @@ $(document).ready(function () {
                 },
             });
     }
+
+    // $("#btns").hide();
+    $("#pdf_container").hide();
 
     getEntrNames();
     getEntrInfos();
