@@ -173,11 +173,11 @@ if (!isset($_SESSION['prenom'])) {
             </div>
 
         </div>
-        <div id="pdf_container" class="container d-flex justify-content-center align-items-center flex-column mb-5">
-            <iframe id="pdf_frame" src="https://github.com/mbenanaya/" style="width: 100%;height: 700px"/>
-            <div id="btns" class="py-2">
+        <div id="pdf_container" class="container d-flex justify-content-center align-items-center flex-column mb-5" style="display:none;">
+            <iframe id="pdf_frame" src="" style="display:none;width: 100%; height: 700px;"></iframe>
+            <div id="btns" class="py-2" style="display:none;">
                 <a href="" id="download_link" class="btn btn-success submit_button mx-1">Télécharger</a>
-                <button class="btn btn-danger del_conv mx-1">Supprimer</button>
+                <button class="btn btn-danger del_conv mx-1" name="supprimer">Supprimer</button>
             </div>
         </div>
     </section>

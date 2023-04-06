@@ -117,11 +117,25 @@ class ConvController
         echo json_encode($data);
     }
 
-    
+    public function deleteConv($cne)
+    {
+        $response = [];
+        header('Content-Type: application/json');
+        if ($this->convention->deleteConv($cne) === true) {
+            $response = ['success' => 'Convention supprimée avec succès.'];
+        } else {
+            $response = ['error' => 'Une erreur est survenue'];
+        }
+        echo json_encode($response);
+        exit();
+    }
+
+
+
 }
 
 $conv = new ConvController;
-// $conv->showConvStats();
+// $conv->deleteConv("G13948391");
 
 if (isset($_POST['action']) && $_POST['action'] == 'showConvs') {
     $conv->showdiplomes();
@@ -135,3 +149,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'showFiltered') {
 if (isset($_POST['crCnvButt'])) {
     $conv->createNewConv();
 }
+
+if (isset($_POST['action']) && isset($_POST['cne']) && $_POST['action'] == 'delConv') {
+    $cne = $_POST['cne'];
+    $conv->deleteConv($cne);
+}
+
+// if (isset($_POST['supprimer'])) {
+//     $cne = $_POST['cne'];
+//     $conv->deleteConv($cne);
+// }

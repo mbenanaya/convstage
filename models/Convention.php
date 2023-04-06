@@ -161,4 +161,15 @@ class Convention
         return $rows;
     }
 
+    public function deleteConv($cne)
+    {
+        $stmt = $this->conn->prepare("DELETE convention FROM convention JOIN etudiant ON convention.cne = etudiant.cne WHERE convention.cne = ?");
+        $stmt->execute([$cne]);
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

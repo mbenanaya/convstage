@@ -222,39 +222,84 @@ $(document).ready(function () {
                             var blob = new Blob([data], {
                                 type: "application/pdf",
                             });
-                            $("#downloadModal").modal("hide");
-                            $("#pdf_container").show();
                             var url = URL.createObjectURL(blob);
                             var pdfFrame = $("#pdf_frame");
-                            pdfFrame.src = url;
+                            $("#downloadModal").modal("hide");
+                            $("#pdf_container").show();
+                            $("#btns").show();
+                            pdfFrame.show();
+                            pdfFrame.attr("src", url);
                             var downloadLink = $("#download_link");
-                            downloadLink.href = url;
-                            downloadLink.download =
-                                "Convention_" + nom + "_" + cne + ".pdf";
+                            downloadLink.attr("href", url);
+                            downloadLink.attr(
+                                "download",
+                                "Convention_" + nom + "_" + cne + ".pdf"
+                            );
+
+                            downloadLink.on("click", function () {
+                                $("#pdf_frame").attr("src", "");
+                                $("#pdf_container").hide();
+                                $("#btns").hide();
+                                pdfFrame.hide();
+                            });
+
                             deleteButton = $(".del_conv");
                             deleteButton.on("click", function () {
                                 Swal.fire({
-                                    title: "Are you sure?",
-                                    text: "You won't be able to revert this!",
+                                    title: "Êtes-vous sûr ?",
+                                    text: "Vous ne pourrez pas revenir en arrière !",
                                     icon: "warning",
                                     showCancelButton: true,
                                     confirmButtonColor: "#3085d6",
                                     cancelButtonColor: "#d33",
                                     confirmButtonText: "Oui, Supprimer",
-                                    cancelButtonText: 'Non, Annuler'
+                                    cancelButtonText: "Non, Annuler",
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        Swal.fire(
-                                            "Supprimeè",
-                                            "Convention supprimée avec successè.",
-                                            "success"
-                                        );
-                                        $("#pdf_cont").html('')
+
+                                        $.ajax({
+                                            url: "./controllers/ConvController.php",
+                                            type: "POST",
+                                            data: { cne: cne },
+                                            action: "delConv",
+                                            dataType: "json",
+                                            success: function (data) {
+                                                console.log(data);
+                                                // if (data.success) {
+                                                //     console.log(data.success);
+                                                //     Swal.fire({
+                                                //         icon: "success",
+                                                //         title: "Supprimé !",
+                                                //         text: data.success,
+                                                //     });
+                                                // } else {
+                                                //     console.log(data.error);
+                                                //     Swal.fire({
+                                                //         icon: "error",
+                                                //         title: "Erreur !",
+                                                //         text: data.error,
+                                                //     });
+                                                // }
+                                            },
+
+                                            error: function (xhr, text, error) {
+                                                console.log(text, error);
+                                                // Swal.fire({
+                                                //     icon: "error",
+                                                //     title: "Erreur",
+                                                //     text: "Une erreur est survenue",
+                                                // });
+                                            },
+                                        });
+                                        
+                                        pdfFrame.attr("src", "");
+                                        pdfFrame.hide();
+                                        $("#pdf_container").hide();
+                                        $("#btns").hide();
                                     }
                                 });
-                                
                             });
-                            
+
                             setTimeout(function () {
                                 URL.revokeObjectURL(url);
                             }, 100);
@@ -278,9 +323,6 @@ $(document).ready(function () {
                 },
             });
     }
-
-    // $("#btns").hide();
-    $("#pdf_container").hide();
 
     getEntrNames();
     getEntrInfos();
