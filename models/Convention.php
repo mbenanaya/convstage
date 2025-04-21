@@ -19,7 +19,7 @@ class Convention
     public function addNewConv($data)
     {
         try {
-            $stmt = $this->conn->prepare("INSERT INTO convention(idConv, cne, nom, prenom, diplome, intitule, description, nomEntr, adrEntr, telEntr, nomEncd, datedebut, datefin, idEntr) VALUES (:idConv, :cne, :nom, :prenom, :diplome, :description, :intitule, :nomEntr, :adrEntr, :telEntr, :nomEncd, :datedebut, :datefin, (SELECT idEntr FROM entreprise WHERE entreprise.nomEntr = :nomEntr))");
+            $stmt = $this->conn->prepare("INSERT INTO convention(idConv, cne, nom, prenom, diplome, intitule, description, nomEntr, adrEntr, telEntr, nomEncd, datedebut, datefin, idEntr, pdf) VALUES (:idConv, :cne, :nom, :prenom, :diplome, :description, :intitule, :nomEntr, :adrEntr, :telEntr, :nomEncd, :datedebut, :datefin, (SELECT idEntr FROM entreprise WHERE entreprise.nomEntr = :nomEntr LIMIT 1), :pdf)");
             $stmt->bindParam(':idConv', $data['idConv']);
             $stmt->bindParam(':cne', $data['cne']);
             $stmt->bindParam(':nom', $data['nom']);
@@ -33,16 +33,38 @@ class Convention
             $stmt->bindParam(':nomEncd', $data['nomEncd']);
             $stmt->bindParam(':datedebut', $data['datedebut']);
             $stmt->bindParam(':datefin', $data['datefin']);
+            $stmt->bindParam(':pdf', $data['pdf']);
 
             if ($stmt->execute()) {
-                return 'done';
+                // return 'done';
+                // $lastId = $this->conn->lastInsertId();
+                return $this->getLastConv($data['cne']);
             } else {
                 throw new Exception('Une erreur est survenue lors de la création de la convention.');
             }
         } catch (PDOException $e) {
-            throw new Exception('Une erreur est survenue lors de la création de la convention.');
+            throw new Exception(
+            'Une erreur est survenue lors de la création de la convention. Error: ' . $e->getMessage());
         }
     }
+
+    function getLastConvById($id)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM convention WHERE idConv = :id");
+        $stmt->execute(array(':id' => $id));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row;
+    }
+
+    function getLastConv($cne)
+    {
+        $stmt = $this->conn->prepare("SELECT cne, nom, prenom, diplome, nomEntr, adrEntr, telEntr, nomEncd, DATE_FORMAT(datedebut, '%d/%m/%Y') AS datedebut, DATE_FORMAT(datefin, '%d/%m/%Y') AS datefin, pdf FROM convention WHERE cne = :cne ORDER BY idConv DESC LIMIT 1");
+        $stmt->execute(array(':cne' => $cne));
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }
+
+
     function getDipsLicence()
     {
         $stmt = $this->conn->prepare("SELECT DISTINCT(diplome) AS diplome FROM convention WHERE diplome IN ('ALTBICG', 'ALTMIPC', 'ALTMAIP')");
@@ -55,6 +77,7 @@ class Convention
         }
         return $newRows;
     }
+
     function getDipsMaster()
     {
         $stmt = $this->conn->prepare("SELECT DISTINCT(diplome) FROM convention WHERE diplome IN ('AMTMAAV','AMTSDAD', 'AMTEXVG', 'AMTMCSM', 'AMTGEEL', 'AMTBIOV', 'AMTMIAI', 'AMTGEAA', 'AMTRDPS', 'AMTMDIM', 'AMTMMEA', 'AMTPSNB')");
@@ -173,3 +196,6 @@ class Convention
     }
 
 }
+
+// $c = new Convention();
+// var_dump($c->getLastConv("G135336417"));

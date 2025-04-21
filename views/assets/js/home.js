@@ -1,330 +1,338 @@
 $(document).ready(function () {
-    $("#list_entr").hide();
+	$("#list_entr").hide();
 
-    $(".close").click(function () {
-        $(".alert").alert("close");
-    });
+	$(".close").click(function () {
+		$(".alert").alert("close");
+	});
 
-    function hideEntrs() {
-        $("#nomEntr").click(function () {
-            $("#showEntrName").removeClass("fa-caret-up");
-            $("#showEntrName").addClass("fa-caret-down");
-            $("#list_entr").fadeOut();
-        });
+	$(document).on("click", ".del_conv", function () {
+		var cne = $(this).data("id"); // assuming you have data-id attribute on your button
 
-        $(document).on("click", ".fa-caret-up#showEntrName", function () {
-            $("#showEntrName").removeClass("fa-caret-up");
-            $("#showEntrName").addClass("fa-caret-down");
-            $("#list_entr").fadeOut();
-        });
-    }
-    hideEntrs();
+		Swal.fire({
+			title: "Êtes-vous sûr?",
+			text: "Vous ne pourrez pas revenir en arrière!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Oui, supprimez-le!",
+			cancelButtonText: "Non, annulez!",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				console.log("cne is ", cne);
+				$.ajax({
+					url: "./controllers/ConvController.php",
+					type: "POST",
+					data: { action: "delConv", cne: cne },
+					dataType: "json",
+					success: function (response) {
+						// handle success
+						console.log(response);
+						// if (response.status === "success") {
+						// 	// Swal.fire(
+						// 	// 	"Supprimé!",
+						// 	// 	"Votre fichier a été supprimé.",
+						// 	// 	"success"
+						// 	// );
+						// 	console.log('deleted :)');
+						// 	// remove the deleted element from the DOM or reload the page
+						// } else {
+						// 	console.log('error :(');
+						// 	// handle error
+						// 	// Swal.fire(
+						// 	// 	"Erreur!",
+						// 	// 	"Il y avait une erreur lors de la suppression de votre fichier.",
+						// 	// 	"error"
+						// 	// );
+						// }
+					},
+					error: function (xhr, textStatus, errorThrown) {
+						console.log(errorThrown);
+						// Swal.fire(
+						// 	"Erreur!",
+						// 	"Il y avait une erreur lors de la suppression de votre fichier.",
+						// 	"error"
+						// );
+					},
+				});
+			}
+		});
+	});
 
-    function getEntrNames() {
-        $(document).on("click", ".fa-caret-down#showEntrName", function () {
-            $(this).removeClass("fa-caret-down");
-            $(this).addClass("fa-caret-up");
-            $.ajax({
-                url: "./controllers/Ajax.php",
-                method: "POST",
-                data: { action: "showNames" },
-                dataType: "json",
-                success: function (data) {
-                    var listItems = "";
-                    $.each(data, function (index, value) {
-                        listItems +=
-                            '<li data-id="' +
-                            value.idEntr +
-                            '">' +
-                            value.nomEntr +
-                            "</li>";
-                    });
-                    $("#list_entr").html(listItems);
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    console.error(textStatus, errorThrown);
-                    Swal.fire({
-                        icon: "error",
-                        title: "Erreur",
-                        text: textStatus,
-                    });
-                },
-            });
-            $("#list_entr").fadeIn("slow");
-        });
-    }
+	function getConvByCne() {
+		var stud_cne = $("#stud_cne").val();
 
-    function getEntrInfos() {
-        $(document).on("click", "#list_entr li", function () {
-            var idEntr = $(this).data("id");
-            $.ajax({
-                url: "./controllers/Ajax.php",
-                type: "POST",
-                data: { idEntr: idEntr },
-                dataType: "json",
-                success: function (data) {
-                    $("#nomEntr").val(data.nomEntr);
-                    $("#adrEntr").val(data.adrEntr);
-                    $("#telEntr").val(data.telEntr);
-                    $("#nomEncd").val(data.nomEncd);
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
-                    Swal.fire({
-                        icon: "error",
-                        title: "Erreur",
-                        text: textStatus,
-                    });
-                },
-            });
+		$.ajax({
+			url: "./controllers/ConvController.php",
+			type: "POST",
+			data: { action: "getLastConv", stud_cne: stud_cne },
+			dataType: "json",
+			success: function (data) {
+				console.log("data is ", data[0]);
 
-            $("#showEntrName").removeClass("fa-caret-up");
-            $("#showEntrName").addClass("fa-caret-down");
-            $("#list_entr").fadeOut();
-        });
-    }
+				if (data[0].pdf) {
+					console.log("Pdf is ", data[0].pdf);
+					var pdfPath = "conventions/" + data[0].pdf;
+					pdfjsLib.workerSrc =
+						"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js";
+					pdfjsLib.GlobalWorkerOptions.workerSrc =
+						"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js";
 
-    function createConv() {
-        var convForm = $("#conv_form");
-        var submitButton = $("#crCnvButt");
-        var cne, nom;
-        convForm
-            .submit(function (e) {
-                e.preventDefault();
-                nom = $("#nom").val();
-                cne = $("#cne").val();
-            })
-            .validate({
-                rules: {
-                    nom: {
-                        required: true,
-                    },
-                    prenom: {
-                        required: true,
-                    },
-                    cne: {
-                        required: true,
-                    },
-                    diplome: {
-                        required: true,
-                    },
-                    datedebut: {
-                        required: true,
-                    },
-                    datefin: {
-                        required: true,
-                    },
-                    intitule: {
-                        required: true,
-                    },
-                    description: {
-                        required: true,
-                    },
-                    nomEntr: {
-                        required: true,
-                    },
-                    adrEntr: {
-                        required: true,
-                    },
-                    telEntr: {
-                        required: true,
-                    },
-                    nomEncd: {
-                        required: true,
-                    },
-                    qltEncd: {
-                        required: true,
-                    },
-                    emailEncd: {
-                        required: true,
-                        email: true,
-                    },
-                    nomResp: {
-                        required: true,
-                    },
-                    qltResp: {
-                        required: true,
-                    },
-                    telResp: {
-                        required: true,
-                    },
-                    emailResp: {
-                        required: true,
-                        email: true,
-                    },
-                },
-                messages: {
-                    emailEncd: {
-                        email: "Veuillez fournir une adresse email valide"
-                    },
-                    emailResp: {
-                        email: "Veuillez fournir une adresse email valide"
-                    }
-                },
+					var pdfContainer = $(
+						'<div class="col-12 col-md-10 col-lg-8 col-xxl-7 d-flex flex-column justify-content-center mb-5" ><div id="btns" class="py-2" style="display: none;"><a href="" id="download_link" class="btn btn-success submit_button mx-1"> <i class="fa fa-download"></i> Télécharger</a><button class="btn btn-danger del_conv mx-1" name="supprimer"><i class="fa fa-trash"></i> Supprimer<button></div></div>'
+					).addClass("pdf-container");
+					var id = $("#stud_cne").val();
+					
+					$(".wrapper").append(pdfContainer);
 
-                submitHandler: function (form) {
-                    var caption = submitButton.html();
-                    $.ajax({
-                        url: "./controllers/ConvController.php",
-                        type: "POST",
-                        data: $(form).serialize(),
-                        contentType:
-                            "application/x-www-form-urlencoded; charset=UTF-8",
-                        dataType: "json",
-                        beforeSend: function () {
-                            submitButton
-                                .attr("disabled", true)
-                                .html("Attendez...");
-                            showLoadingSpinner();
-                        },
-                        success: function (data) {
-                            // submitButton.attr("disabled", false).html(caption);
-                            setTimeout(function () {
-                                submitButton
-                                    .attr("disabled", true)
-                                    .html("Attender...");
-                            }, 200);
-                        },
-                        error: function (xhr, textStatus, errorThrown) {
-                            submitButton.attr("disabled", false).html(caption);
-                            Swal.fire({
-                                icon: "error",
-                                title: "Erreur",
-                                text: "Une erreur est survenue",
-                            });
-                        },
-                        complete: function () {
-                            // setTimeout(function () {
-                            //     submitButton
-                            //         .attr("disabled", true)
-                            //         .html("Attender...");
-                            // }, 100);
-                            submitButton.attr("disabled", false).html(caption);
-                            hideLoadingSpinner();
-                        },
-                    });
+					pdfjsLib
+						.getDocument({
+							url: pdfPath,
+						})
+						.promise.then(function (pdf) {
+							var pdfContainer = $(".pdf-container")[0];
+							var scale = 1;
+							$("#btns").show();
 
-                    $.ajax({
-                        url: "./views/generate_conv.php",
-                        type: "POST",
-                        data: $(form).serialize(),
-                        xhrFields: {
-                            responseType: "blob",
-                        },
-                        beforeSend: function () {
-                            submitButton
-                                .attr("disabled", true)
-                                .html("Attender...");
-                            showLoadingSpinner();
-                        },
-                        success: function (data) {
-                            submitButton.attr("disabled", false).html(caption);
-                            var blob = new Blob([data], {
-                                type: "application/pdf",
-                            });
-                            var url = URL.createObjectURL(blob);
-                            var pdfFrame = $("#pdf_frame");
-                            $("#downloadModal").modal("hide");
-                            $("#pdf_container").show();
-                            $("#btns").show();
-                            pdfFrame.show();
-                            pdfFrame.attr("src", url);
-                            var downloadLink = $("#download_link");
-                            downloadLink.attr("href", url);
-                            downloadLink.attr(
-                                "download",
-                                "Convention_" + nom + "_" + cne + ".pdf"
-                            );
+							function renderPage(pageNum) {
+								pdf.getPage(pageNum).then(function (page) {
+									var viewport = page.getViewport({
+										scale: scale,
+									});
+									var canvas =
+										document.createElement("canvas");
+									var context = canvas.getContext("2d");
+									canvas.className = "pdf-canvas";
+									canvas.width = viewport.width;
+									canvas.height = viewport.height;
+									pdfContainer.append(canvas);
+									var renderContext = {
+										canvasContext: context,
+										viewport: viewport,
+									};
+									page.render(renderContext);
+									if (pageNum < pdf.numPages) {
+										renderPage(pageNum + 1);
+									}
+								});
+							}
+							renderPage(1);
+						});
+					$(".del_conv").data("id", id);
+				}
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				console.error(textStatus, errorThrown);
+				// Swal.fire({
+				//     icon: "error",
+				//     title: "Erreur",
+				//     text: textStatus,
+				// });
+			},
+			complete: function () {
+				// hideLoadingSpinner();
+			},
+		});
+	}
 
-                            downloadLink.on("click", function () {
-                                $("#pdf_frame").attr("src", "");
-                                $("#pdf_container").hide();
-                                $("#btns").hide();
-                                pdfFrame.hide();
-                            });
+	function hideEntrs() {
+		$("#nomEntr").click(function () {
+			$("#showEntrName").removeClass("fa-caret-up");
+			$("#showEntrName").addClass("fa-caret-down");
+			$("#list_entr").fadeOut();
+		});
 
-                            deleteButton = $(".del_conv");
-                            deleteButton.on("click", function () {
-                                Swal.fire({
-                                    title: "Êtes-vous sûr ?",
-                                    text: "Vous ne pourrez pas revenir en arrière !",
-                                    icon: "warning",
-                                    showCancelButton: true,
-                                    confirmButtonColor: "#3085d6",
-                                    cancelButtonColor: "#d33",
-                                    confirmButtonText: "Oui, Supprimer",
-                                    cancelButtonText: "Non, Annuler",
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
+		$(document).on("click", ".fa-caret-up#showEntrName", function () {
+			$("#showEntrName").removeClass("fa-caret-up");
+			$("#showEntrName").addClass("fa-caret-down");
+			$("#list_entr").fadeOut();
+		});
+	}
+	hideEntrs();
 
-                                        $.ajax({
-                                            url: "./controllers/ConvController.php",
-                                            type: "POST",
-                                            data: { cne: cne },
-                                            action: "delConv",
-                                            dataType: "json",
-                                            success: function (data) {
-                                                console.log(data);
-                                                // if (data.success) {
-                                                //     console.log(data.success);
-                                                //     Swal.fire({
-                                                //         icon: "success",
-                                                //         title: "Supprimé !",
-                                                //         text: data.success,
-                                                //     });
-                                                // } else {
-                                                //     console.log(data.error);
-                                                //     Swal.fire({
-                                                //         icon: "error",
-                                                //         title: "Erreur !",
-                                                //         text: data.error,
-                                                //     });
-                                                // }
-                                            },
+	function getEntrNames() {
+		$(document).on("click", ".fa-caret-down#showEntrName", function () {
+			$(this).removeClass("fa-caret-down");
+			$(this).addClass("fa-caret-up");
+			$.ajax({
+				url: "./controllers/Ajax.php",
+				method: "POST",
+				data: { action: "showNames" },
+				dataType: "json",
+				success: function (data) {
+					var listItems = "";
+					$.each(data, function (index, value) {
+						listItems +=
+							'<li data-id="' +
+							value.idEntr +
+							'">' +
+							value.nomEntr +
+							"</li>";
+					});
+					$("#list_entr").html(listItems);
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					console.error(textStatus, errorThrown);
+					Swal.fire({
+						icon: "error",
+						title: "Erreur",
+						text: textStatus,
+					});
+				},
+			});
+			$("#list_entr").fadeIn("slow");
+		});
+	}
 
-                                            error: function (xhr, text, error) {
-                                                console.log(text, error);
-                                                // Swal.fire({
-                                                //     icon: "error",
-                                                //     title: "Erreur",
-                                                //     text: "Une erreur est survenue",
-                                                // });
-                                            },
-                                        });
-                                        
-                                        pdfFrame.attr("src", "");
-                                        pdfFrame.hide();
-                                        $("#pdf_container").hide();
-                                        $("#btns").hide();
-                                    }
-                                });
-                            });
+	function getEntrInfos() {
+		$(document).on("click", "#list_entr li", function () {
+			var idEntr = $(this).data("id");
+			$.ajax({
+				url: "./controllers/Ajax.php",
+				type: "POST",
+				data: { idEntr: idEntr },
+				dataType: "json",
+				success: function (data) {
+					$("#nomEntr").val(data.nomEntr);
+					$("#adrEntr").val(data.adrEntr);
+					$("#telEntr").val(data.telEntr);
+					$("#nomEncd").val(data.nomEncd);
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+					Swal.fire({
+						icon: "error",
+						title: "Erreur",
+						text: textStatus,
+					});
+				},
+			});
 
-                            setTimeout(function () {
-                                URL.revokeObjectURL(url);
-                            }, 100);
-                        },
-                        error: function (xhr, textStatus, errorThrown) {
-                            submitButton.attr("disabled", false).html(caption);
-                            hideLoadingSpinner();
-                            Swal.fire({
-                                icon: "error",
-                                title: "Erreur",
-                                text: "Une erreur est survenue",
-                            });
-                        },
-                        complete: function () {
-                            submitButton.attr("disabled", false).html(caption);
-                            hideLoadingSpinner();
-                        },
-                    });
+			$("#showEntrName").removeClass("fa-caret-up");
+			$("#showEntrName").addClass("fa-caret-down");
+			$("#list_entr").fadeOut();
+		});
+	}
 
-                    $(form).trigger("reset");
-                },
-            });
-    }
+	function createConv() {
+		var convForm = $("#conv_form");
+		var submitButton = $("#crCnvButt");
+		var cne, nom;
+		convForm
+			.submit(function (e) {
+				e.preventDefault();
+				nom = $("#nom").val();
+				cne = $("#cne").val();
+			})
+			.validate({
+				rules: {
+					nom: {
+						required: true,
+					},
+					prenom: {
+						required: true,
+					},
+					cne: {
+						required: true,
+					},
+					diplome: {
+						required: true,
+					},
+					datedebut: {
+						required: true,
+					},
+					datefin: {
+						required: true,
+					},
+					intitule: {
+						required: true,
+					},
+					description: {
+						required: true,
+					},
+					nomEntr: {
+						required: true,
+					},
+					adrEntr: {
+						required: true,
+					},
+					telEntr: {
+						required: true,
+					},
+					nomEncd: {
+						required: true,
+					},
+					qltEncd: {
+						required: true,
+					},
+					emailEncd: {
+						required: true,
+						email: true,
+					},
+					nomResp: {
+						required: true,
+					},
+					qltResp: {
+						required: true,
+					},
+					telResp: {
+						required: true,
+					},
+					emailResp: {
+						required: true,
+						email: true,
+					},
+				},
+				messages: {
+					emailEncd: {
+						email: "Veuillez fournir une adresse email valide",
+					},
+					emailResp: {
+						email: "Veuillez fournir une adresse email valide",
+					},
+				},
 
-    getEntrNames();
-    getEntrInfos();
-    createConv();
+				submitHandler: function (form) {
+					var caption = submitButton.html();
+					$.ajax({
+						url: "./controllers/ConvController.php",
+						type: "POST",
+						data: $(form).serialize(),
+						contentType:
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						// dataType: "json",
+						beforeSend: function () {
+							submitButton
+								.attr("disabled", true)
+								.html("Attendez...");
+							// showLoadingSpinner();
+						},
+						success: function (data) {
+							submitButton.attr("disabled", false).html(caption);
+							console.log(data);
+						},
+						error: function (xhr, textStatus, errorThrown) {
+							submitButton.attr("disabled", false).html(caption);
+							Swal.fire({
+								icon: "error",
+								title: "Erreur",
+								text: "Une erreur est survenue",
+							});
+							console.log("er ", errorThrown);
+						},
+						complete: function () {
+							submitButton.attr("disabled", false).html(caption);
+							// hideLoadingSpinner();
+						},
+					});
+
+					$(form).trigger("reset");
+				},
+			});
+	}
+
+	getEntrNames();
+	getEntrInfos();
+	createConv();
+	getConvByCne();
 });

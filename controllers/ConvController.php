@@ -2,6 +2,7 @@
 
 require_once '../models/Entreprise.php';
 require_once '../models/Convention.php';
+require_once '../generate_conv.php';
 
 class ConvController
 {
@@ -13,9 +14,9 @@ class ConvController
         $this->convention = new Convention;
         $this->entreprise = new Entreprise;
     }
-    public function createNewConv()
-    {
 
+    public function createNewConv($pdfFilename)
+    {
         $cne = stripcslashes(htmlspecialchars(trim($_POST['cne'])));
         $nom = stripcslashes(htmlspecialchars(trim($_POST['nom'])));
         $idConv = $cne . '_' . date('d-m-Y_H:i:s');
@@ -43,7 +44,8 @@ class ConvController
             'telEntr' => '',
             'nomEncd' => '',
             'datedebut' => '',
-            'datefin' => ''
+            'datefin' => '',
+            'pdf' => '',
         ];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -60,19 +62,31 @@ class ConvController
                 'telEntr' => $telEntr,
                 'nomEncd' => $nomEncd,
                 'datedebut' => $datedebut,
-                'datefin' => $datefin
+                'datefin' => $datefin,
+                'pdf' => $pdfFilename,
             ];
         }
 
-        header('Content-Type: application/json');
+        // header('Content-Type: application/json');
         $this->entreprise->addNewEntr($data);
         $ins_conv = $this->convention->addNewConv($data);
         $response = [
             'conv' => $ins_conv,
         ];
-        echo json_encode($response);
-
+        // echo json_encode($response);
+        // echo $ins_conv;
+        echo json_encode($ins_conv);
     }
+
+    function fetchLastConv($cne)
+    {
+        header('Content-Type: application/json');
+        $lastConvention = $this->convention->getLastConv($cne);
+        echo json_encode($lastConvention);
+
+        // echo $lastConvention;
+    }
+
     public function showdiplomes()
     {
         $diplomes = [
@@ -104,7 +118,6 @@ class ConvController
         echo json_encode($diplomes, JSON_UNESCAPED_UNICODE);
     }
 
-
     public function showListOfConvs($f)
     {
         $data = [];
@@ -126,16 +139,14 @@ class ConvController
         } else {
             $response = ['error' => 'Une erreur est survenue'];
         }
+        // echo $response;
         echo json_encode($response);
-        exit();
+        // exit();
     }
-
-
-
 }
 
 $conv = new ConvController;
-// $conv->deleteConv("G13948391");
+// $conv->deleteConv("G135336421");
 
 if (isset($_POST['action']) && $_POST['action'] == 'showConvs') {
     $conv->showdiplomes();
@@ -147,15 +158,16 @@ if (isset($_POST['action']) && $_POST['action'] == 'showFiltered') {
 }
 
 if (isset($_POST['crCnvButt'])) {
-    $conv->createNewConv();
+    $pdfFilename = generatePDF();
+    $conv->createNewConv($pdfFilename);
+}
+
+if (isset($_POST['action']) && isset($_POST['stud_cne']) && $_POST['action'] == 'getLastConv') {
+    $cne = $_POST['stud_cne'];
+    $conv->fetchLastConv($cne);
 }
 
 if (isset($_POST['action']) && isset($_POST['cne']) && $_POST['action'] == 'delConv') {
     $cne = $_POST['cne'];
     $conv->deleteConv($cne);
 }
-
-// if (isset($_POST['supprimer'])) {
-//     $cne = $_POST['cne'];
-//     $conv->deleteConv($cne);
-// }

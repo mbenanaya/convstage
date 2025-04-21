@@ -25,8 +25,8 @@ class LoginController
     {
         header('Content-Type: application/json');
 
-        $cne = filter_var($cne, FILTER_SANITIZE_STRING);
-        $dateNaiss = filter_var($dateNaiss, FILTER_SANITIZE_STRING);
+        $cne = htmlspecialchars($cne);
+        $dateNaiss = htmlspecialchars($dateNaiss);
         $row = $this->etudiant->Login($cne, $dateNaiss);
 
         if ($row) {
@@ -55,7 +55,7 @@ class LoginController
         header('Content-Type: application/json');
 
         $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-        $password = filter_var($password, FILTER_SANITIZE_STRING);
+        $password = htmlspecialchars($password);
         $row = $this->admin->adminLogin($email, $password);
 
         if ($row) {
